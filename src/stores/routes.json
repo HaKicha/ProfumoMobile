@@ -1,0 +1,16 @@
+{
+  "MAIN": "/",
+  "SIGN_IN": "/signIn",
+  "SIGN_UP": "/signUp",
+  "PRODUCT": "/product/:id",
+  "GLOBAL_SEARCH": "/search",
+  "CATALOG": "/catalog/:id",
+  "CART": "/cart",
+  "FORGOT_PASSWORD": "/forgotPassword",
+  "RESET_PASSWORD": "/resetPassword",
+  "CABINET": "/cabinet",
+  "PURCHASE_HISTORY": "/cabinet/history",
+  "WHISHLIST": "/whishlist",
+  "CONTACTS": "/cabinet/contacts",
+  "PROFILE": "/cabinet/profile"
+}

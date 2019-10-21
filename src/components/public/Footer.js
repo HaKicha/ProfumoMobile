@@ -6,54 +6,62 @@ import {faAlignLeft} from '@fortawesome/free-solid-svg-icons';
 import {faShoppingCart} from '@fortawesome/free-solid-svg-icons';
 import {faSearch} from '@fortawesome/free-solid-svg-icons';
 import {faHeart} from '@fortawesome/free-solid-svg-icons';
-import {faUserAlt} from '@fortawesome/free-solid-svg-icons';
+import {faUserCircle} from '@fortawesome/free-solid-svg-icons';
+import {AnimatedIcon} from "../../stores/AnimatedObjectStore";
+import {Link} from "react-router-dom";
+import routes from '../../stores/routes'
+import {inject, observer} from "mobx-react";
 
+@inject('store')
+@observer
 export default class Footer extends React.Component{
     render() {
         return (
                 <ThemeProvider theme={theme}>
                 <GlobalMain>
-                        <CartButton id="star-this-item"
-                                className="mdc-icon-button mdc-icon-button--on"
-                                aria-label="Unstar this item"
-                                aria-hidden="true"
-                                aria-pressed="true">
-                            <Icon icon={faShoppingCart} size="1x" className="mdc-icon-button__icon mdc-icon-button__icon--on"/>
-                        </CartButton>
+                    <CartButton to={routes.CART}>
+                        <AnimatedIcon
+                            height={'34px'}
+                            width={'34px'}
+                            padding={'13px'}
+                            icon={faShoppingCart}
+                        />
+                    </CartButton>
                     <Pane>
-                        <ButIcon id="star-this-item"
-                                className="mdc-icon-button mdc-icon-button--on"
-                                aria-label="Unstar this item"
-                                aria-hidden="true"
-                                aria-pressed="true">
-                            <FaIcon icon={faAlignLeft} size="1x" className="mdc-icon-button__icon"/>
-                            <FaIcon icon={faAlignLeft} size="1x" className="mdc-icon-button__icon mdc-icon-button__icon--on"/>
-                        </ButIcon>
-                        <ButIcon id="star-this-item"
-                                className="mdc-icon-button mdc-icon-button--on"
-                                aria-label="Unstar this item"
-                                aria-hidden="true"
-                                aria-pressed="true">
-                            <FaIcon icon={faSearch} size="1x" className="mdc-icon-button__icon"/>
-                            <FaIcon icon={faSearch} size="1x" className="mdc-icon-button__icon mdc-icon-button__icon--on"/>
-                        </ButIcon>
+                        <ButtonContainer to={this.props.store.userStore.isLogged?routes.PURCHASE_HISTORY:routes.SIGN_IN}>
+                            <AnimatedIcon
+                                height={'26px'}
+                                width={'26px'}
+                                padding={'9px'}
+                                icon={faAlignLeft}
+                                bgcolor={theme.primary_light}
+                            />
+                        </ButtonContainer>
+                        <ButtonContainer to={routes.GLOBAL_SEARCH}>
+                            <AnimatedIcon
+                                height={'26px'}
+                                width={'26px'}
+                                padding={'9px'}
+                                bgcolor={theme.primary_light}
+                                icon={faSearch}/>
+                        </ButtonContainer>
                         <span/>
-                        <ButIcon id="star-this-item"
-                                className="mdc-icon-button mdc-icon-button--on"
-                                aria-label="Unstar this item"
-                                aria-hidden="true"
-                                aria-pressed="true">
-                            <FaIcon icon={faHeart} size="1x" className="mdc-icon-button__icon"/>
-                            <FaIcon icon={faHeart} size="1x" className="mdc-icon-button__icon mdc-icon-button__icon--on"/>
-                        </ButIcon>
-                        <ButIcon id="star-this-item"
-                                className="mdc-icon-button mdc-icon-button--on"
-                                aria-label="Unstar this item"
-                                aria-hidden="true"
-                                aria-pressed="true">
-                            <FaIcon icon={faUserAlt} size="1x" className="mdc-icon-button__icon"/>
-                            <FaIcon icon={faUserAlt} size="1x" className="mdc-icon-button__icon mdc-icon-button__icon--on"/>
-                        </ButIcon>
+                        <ButtonContainer to={routes.WHISHLIST}>
+                            <AnimatedIcon
+                                height={'26px'}
+                                width={'26px'}
+                                padding={'9px'}
+                                bgcolor={theme.primary_light}
+                                icon={faHeart}/>
+                        </ButtonContainer>
+                        <ButtonContainer to={this.props.store.userStore.isLogged?routes.CABINET:routes.SIGN_IN}>
+                            <AnimatedIcon
+                                height={'26px'}
+                                width={'26px'}
+                                padding={'9px'}
+                                bgcolor={theme.primary_light}
+                                icon={faUserCircle}/>
+                        </ButtonContainer>
                     </Pane>
                 </GlobalMain>
                 </ThemeProvider>
@@ -66,7 +74,7 @@ const GlobalMain = styled.div`
   position: fixed;
   bottom: 0;
   width: 100vw;
-  z-index: 2;
+  z-index: 11;
 `
 const Pane = styled.div`
   height: 50px;
@@ -75,36 +83,20 @@ const Pane = styled.div`
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   
 `
-const FaIcon = styled(FontAwesomeIcon)`
-  justify-self: center;
-  align-self: center;
-  color: #ffffff;
-  &:active{
-    color:#767676;
-  }
-`;
 
-const CartButton = styled.button`
+const CartButton = styled(Link)`
   height: 60px;
   width: 60px;
   background-color: ${props => props.theme.primary};
   border-radius: 50%;
-  border-bottom: 3px solid white;
-  border-left: 3px solid white;
-  border-right: 3px solid white;
+  border: 3px solid white;
   position: fixed;
   left: calc(50vw - 30px);
   bottom: 20px;
 `
-const Icon = styled(FontAwesomeIcon)`
-  color: #ffffff;
-  padding-right: 4px;
-  &:active{
-    color:#767676;!important;
-  }
-`;
-const ButIcon = styled.button`
-  justify-self: center;
-  align-self: center;
-`
 
+const ButtonContainer = styled(Link)`
+  display: block;
+  width: max-content;
+  justify-self: center;
+`

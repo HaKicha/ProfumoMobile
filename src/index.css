@@ -2,6 +2,26 @@ body {
 	margin: 0;
 	padding: 0;
 	font-family: "Gilroy", sans-serif;
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none;   /* Chrome/Safari/Opera */
+	-khtml-user-select: none;    /* Konqueror */
+	-moz-user-select: none;      /* Firefox */
+	-ms-user-select: none;       /* Internet Explorer/Edge */
+	user-select: none;
+	overflow-x: hidden;
+}
+
+input,
+button{
+	font-family: "Gilroy";
+}
+
+input{
+	-webkit-touch-callout: default; /* iOS Safari */
+	-webkit-user-select: auto;   /* Chrome/Safari/Opera */
+	-khtml-user-select: auto;    /* Konqueror */
+	-moz-user-select: auto;      /* Firefox */
+	-ms-user-select: auto;       /* Internet Explorer/Edge */
 }
 
 @font-face {
