@@ -26,7 +26,7 @@ render() {
                     <Avatar src={this.props.store.userStore.User.gender === 'female'?female:male}/>
                     <b>{this.props.store.userStore.User.name} {this.props.store.userStore.User.surname}</b>
                 </UserBlock>
-                <NavButton to={routes.CONTACTS}>
+                <NavButton to={routes.USER_CONTACTS}>
                     <img src={contacts}/>
                     <span>Адрес доставки</span>
                 </NavButton>

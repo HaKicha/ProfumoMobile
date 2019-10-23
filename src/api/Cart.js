@@ -1,5 +1,5 @@
 import {UrlStore} from "../stores/UrlStore";
-import {getAuthData} from "../controllers/Cookies";
+import {getAuthData} from "../modules/LocalStorageWorker";
 
 /**
  * @return {boolean}

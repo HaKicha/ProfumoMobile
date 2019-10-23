@@ -13,6 +13,8 @@ const PRODUCT_QUERY = gql`query ($id: ID!){
         gender
         response
         owner {
+          _id
+          gender
           name
           surname
         }

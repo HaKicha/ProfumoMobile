@@ -17,8 +17,13 @@ export default class SearchInput extends React.Component {
     }
 
     searchClickHandler(){
-        if (this.inputRef.current.value !== '')
-        history.push('/catalog/&' + this.inputRef.current.value);
+        if (this.inputRef.current.value !== '') {
+            let Url = '/catalog/';
+            if (this.props.productId !== '') Url += this.props.productId;
+            Url += '&';
+            Url += this.inputRef.current.value;
+            history.push(Url);
+        }
     }
 
     clearClickHandler(){

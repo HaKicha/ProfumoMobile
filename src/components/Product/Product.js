@@ -14,14 +14,19 @@ import About from "./About";
 import Characters from "./Characters";
 import Comments from "./Comments";
 import Preloader from "../public/Preloader";
+import {inject, observer} from "mobx-react";
 
+@inject('store')
+@observer
 export default class Product extends React.Component{
 
     constructor(props){
         super(props);
         this.state = {
-            currentView: 'about'
+            currentView: 'about',
+            isFavorite: props.store.whishlist.has(props.match.params.id)
         }
+        this.refetch = () => {};
     }
 
 
@@ -41,6 +46,7 @@ export default class Product extends React.Component{
                                 console.log(error);
                                 return <p>Error</p>
                             }
+                            this.refetch = refetch;
                             let images = data.product.photos.map(elem => ({original: UrlStore.MAIN_URL + elem.url}));
                             let comments = data.product.comments.length > 0?
                                 <p>комментариев: {data.product.comments.length}</p>:<p>комментариев пока нет</p>
@@ -75,8 +81,15 @@ export default class Product extends React.Component{
                                     <ButtonsBlock>
                                         <AnimatedIcon
                                             icon={faHeart}
-                                            color={'#b1b1b1'}
+                                            color={this.state.isFavorite?theme.primary:'#b1b1b1'}
                                             bgcolor={theme.primary_light}
+                                            onClick={() => {
+                                                this.setState(oldState => {
+                                                    if (!oldState.isFavorite)
+                                                        this.props.store.whishlist.add(this.props.match.params.id)
+                                                    else this.props.store.whishlist.remove(this.props.match.params.id)
+                                                    return {isFavorite: !oldState.isFavorite}})
+                                            }}
                                         />
                                         <AnimatedButton
                                             height={'50px'}
@@ -84,6 +97,7 @@ export default class Product extends React.Component{
                                             bgcolor={theme.primary_light}
                                             boxShadow={'0 0 4px rgba(0,0,0,0.5)'}
                                             fontSize={'10pt'}
+                                            onClick={() => this.props.store.cart.add(this.props.match.params.id, 1)}
                                         >
                                             Добавить в корзину
                                         </AnimatedButton>
@@ -91,6 +105,15 @@ export default class Product extends React.Component{
                                             icon={faShareAlt}
                                             color={'#b1b1b1'}
                                             bgcolor={theme.primary_light}
+                                            onClick={() => {
+                                                if (navigator.share !== undefined) {
+                                                    navigator.share({
+                                                        title: data.product.name_ru,
+                                                        text: data.product.vendor,
+                                                        url: location.href
+                                                    }).then(a => console.log(a));
+                                                }
+                                            }}
                                         />
                                     </ButtonsBlock>
                                     <Specifilications>
@@ -101,13 +124,17 @@ export default class Product extends React.Component{
                                                         onClick={() => this.setState({currentView: 'characters'})}
                                         >Характеристики</AnimatedButton>
                                         <AnimatedButton {...ButtonSettings}
-                                                        onClick={() => this.setState({currentView: 'comments'})}
+                                                        onClick={() => {
+                                                            this.setState({currentView: 'comments'})
+                                                        }}
                                         >Комментарии</AnimatedButton>
                                     </Specifilications>
                                     <Line/>
                                     {this.state.currentView === 'about' && <About product={data.product}/>}
                                     {this.state.currentView === 'characters' && <Characters product={data.product}/>}
-                                    {this.state.currentView === 'comments' && <Comments product={data.product} refetch={refetch.bind(this)}/>}
+                                    {this.state.currentView === 'comments' && <Comments
+                                        product={data.product}
+                                        refetch={refetch.bind(this)} />}
                                 </Container>
                             )
                         }}
@@ -165,7 +192,7 @@ const Title = styled.h3`
 `
 const Star = styled.div`
   display: grid;
-  * {float: right}
+  justify-content: right;
   p{
     font-size: 14px;
     font-weight: normal;

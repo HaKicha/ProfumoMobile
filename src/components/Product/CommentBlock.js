@@ -1,14 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import StarRatings from "react-star-ratings";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTimes} from "@fortawesome/free-solid-svg-icons";
-// import {deleteComment} from "../../api/Comments";
 import {inject} from "mobx-react";
 import male from '../../resources/image/genderIcons/male.svg';
 import female from '../../resources/image/genderIcons/female.svg';
 import {theme} from "../../stores/StyleStore";
 import {AnimatedIcon} from "../../stores/AnimatedObjectStore";
+import {deleteComment} from "../../api/Comments";
 
 @inject('store')
 export default class CommentBlock extends React.Component {
@@ -19,15 +18,15 @@ export default class CommentBlock extends React.Component {
     }
 
     clickHandler = () => {
-        //deleteComment(this.props.elem._id);
+        deleteComment(this.props.elem._id);
         this.props.refetch();
     }
 
     render() {
-        // let user = this.props.store.userStore.User();
+        let user = this.props.store.userStore.User;
         return(
             <Container>
-                <Image src={/*this.props.elem.owner.gender*/'male' === 'male'?male:female}/>
+                <Image src={this.props.elem.owner.gender === 'male'?male:female}/>
                 <Comment>
                     <Username>{this.props.elem.owner.name} {this.props.elem.owner.surname}</Username>
                     <StarRatings
@@ -40,7 +39,7 @@ export default class CommentBlock extends React.Component {
                         starSpacing={'0px'}
                     />
                     <Verified>{this.props.elem.verified?<span>&#10004;</span>:''}</Verified>
-                    {/*this.props.elem.owner._id === user._id?*/<CloseIcon
+                    {this.props.elem.owner._id === user._id?<CloseIcon
                         icon={faTimes}
                         size={'sm'}
                         key={this.props.elem._id}
@@ -48,12 +47,12 @@ export default class CommentBlock extends React.Component {
                         width={'15px'}
                         padding={'4px'}
                         color={'black'}
-                        onClick={this.clickHandler}/>/*:''*/}
+                        onClick={this.clickHandler}/>:''}
                     <Content>{this.props.elem.text}</Content>
                 </Comment>
                 {this.props.elem.response ===''?'':
                     <Response>
-                        <Image src={/*this.props.elem.owner.gender*/'male' === 'male'?female:male}/>
+                        <Image src={this.props.elem.owner.gender === 'male'?female:male}/>
                         <ResponseBody>
                             <span>Profumo</span>
                             <Content>{this.props.elem.response}</Content>

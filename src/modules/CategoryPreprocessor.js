@@ -9,6 +9,5 @@ export function parseCategory(category){
             buffer.push(...elem.products)
         })
     }
-    console.log(buffer);
     return buffer;
 }

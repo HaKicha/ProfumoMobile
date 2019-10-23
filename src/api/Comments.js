@@ -1,5 +1,5 @@
 import {UrlStore} from "../stores/UrlStore";
-import {getAuthData} from "../controllers/Cookies";
+import {getAuthData} from "../modules/LocalStorageWorker";
 
 export async function addComment(text, rating, product) {
         let response = await fetch(`${UrlStore.MAIN_URL}/comments`,

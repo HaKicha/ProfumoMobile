@@ -6,7 +6,8 @@ import LogoImg from '../../resources/image/Logo.svg'
 import {faBars} from '@fortawesome/free-solid-svg-icons';
 import {AnimatedIcon} from "../../stores/AnimatedObjectStore";
 import {Link} from "react-router-dom";
-import Catalog from "./Catalog/Catalog";
+import Navigation from "./Navigation";
+
 
 export default class Header extends React.Component{
 
@@ -38,9 +39,9 @@ export default class Header extends React.Component{
                             onClick={this.toggleLeftPane}
                         />
                     </Container>
-                    <LeftPapne isLeftPaneOpen={this.state.isLeftPaneOpen}>
-                        <Catalog closePane={this.toggleLeftPane}/>
-                    </LeftPapne>
+                    <LeftPane isLeftPaneOpen={this.state.isLeftPaneOpen}>
+                        <Navigation closePane={this.toggleLeftPane}/>
+                    </LeftPane>
                     <LeftPaneGround
                         isLeftPaneOpen={this.state.isLeftPaneOpen}
                         onClick={this.toggleLeftPane}
@@ -74,9 +75,10 @@ const Logo = styled.img`
   object-fit: contain;
 `;
 
-const LeftPapne = styled.div`
+const LeftPane = styled.div`
     z-index: 10;
     display: grid;
+    grid-auto-rows: max-content;
     position: fixed;
     top: 50px;
     left: ${props => props.isLeftPaneOpen?'0':'-80vw'};

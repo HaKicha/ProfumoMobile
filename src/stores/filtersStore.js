@@ -14,7 +14,6 @@ export class FiltersStore {
         this.setSearchQuery = this.setSearchQuery.bind(this);
     }
 
-    @observable state = ''; // "pending" / "done" / "error"
     @observable
     filters = {};
     @observable
@@ -52,7 +51,6 @@ export class FiltersStore {
 
     @computed
     get Filters(){
-        console.log(toJS(this.filters));
         return toJS(this.filters);
     }
 

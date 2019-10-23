@@ -17,6 +17,7 @@ import {getProductsCount} from "../../api/Products";
 import {theme} from "../../stores/StyleStore";
 import {parseCategory} from "../../modules/CategoryPreprocessor";
 import {clone} from 'lodash'
+import Recomendations from "../public/Recomendations";
 
 @inject('store')
 @observer
@@ -30,9 +31,10 @@ export default class Catalog extends React.Component {
             filtersOpen: false,
             sortingOpen: false,
             sortingOrder: 'rating:asc',
-            page: 1,
+            page: 0,
             pageCount: 1,
-            stringSearch: false
+            stringSearch: false,
+            idSearch: false
         };
 
         this.defaultPageSize = 18;
@@ -64,14 +66,27 @@ export default class Catalog extends React.Component {
 
     updateIdentifiers(expr){
         this.setState({isLoading: true});
-        if (expr.charAt(0) === '&'){
+        let identifiers = [];
+
+        if (expr.charAt(24) === '&') {
+            let data = expr.split('&');
+            let promice1 = getProductParams(data[1]);
+            let promice2 = getCategoryParams(data[0]);
+            Promise.all([promice1, promice2]).then(values => {
+                this.props.store.filters.addProperties(...values[0],...parseCategory(values[1]));
+                identifiers.push(data[0]);
+                identifiers.push(...values[1].child.map(elem => elem._id));
+                this.setState({identifiers: identifiers, isLoading: false, stringSearch: true, idSearch: true})
+            }
+        )
+        }
+        else if (expr.charAt(0) === '&'){
             getProductParams(expr.substr(1)).then(data => {
                 this.props.store.filters.addProperties(...data);
                 this.setState({isLoading: false, stringSearch: true});
             })
         }
         else {
-            let identifiers = [];
             getCategoryParams(expr).then(data => {
                 this.props.store.filters.addProperties(...parseCategory(data))
                 identifiers.push(expr);
@@ -92,27 +107,24 @@ export default class Catalog extends React.Component {
 
 
     render() {
+        
         let key = '';
 
         let filtersJson = clone(this.props.store.filters.Filters);
         if (this.state.stringSearch) {
             key = this.props.match.params.id;
-            console.log(key);
             if (typeof filtersJson.properties !== "undefined")
                 key = key + filtersJson.properties._id.length + filtersJson.properties._id[0];
-            console.log(key);
-            filtersJson._q = this.props.match.params.id.substr(1);
+            filtersJson._q = this.props.match.params.id.split('&')[1];
         }
-        else {
+        if (this.state.idSearch) {
             key = this.state.identifiers[0] + this.state.identifiers.length;
-            console.log(key);
             filtersJson.category = {_id: this.state.identifiers};
         }
-        console.log(filtersJson);
         return (
             <PageWrapper>
                 <HeadBlock>
-                    <SearchInput/>
+                    <SearchInput productId={this.props.match.params.id.split('&')[0]}/>
                     <AnimatedButton {...ButtonParams} onClick={this.toggleFiters}>Фильтры</AnimatedButton>
                     <AnimatedButton {...ButtonParams} onClick={this.toggleSort}>Сортировать</AnimatedButton>
                 </HeadBlock>
@@ -129,7 +141,7 @@ export default class Catalog extends React.Component {
                         filters: filtersJson,
                         sortingOrder: this.state.sortingOrder,
                         limit: this.defaultPageSize,
-                        start: this.defaultPageSize * (this.state.page - 1)
+                        start: this.defaultPageSize * this.state.page
                     }}
                 >
                     {({loading, error, data}) => {
@@ -176,6 +188,7 @@ export default class Catalog extends React.Component {
                         activeClassName={'active'}
                     />}
                 </PaginationContainer>
+                {this.state.isLoading?null:<Recomendations/>}
             </PageWrapper>
         )
     }

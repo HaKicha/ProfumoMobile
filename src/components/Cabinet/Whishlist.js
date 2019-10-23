@@ -23,16 +23,23 @@ export default class Whishlist extends React.Component {
 
 
 render() {
+    if (!this.props.store.whishlist.getAll.filter(el => el !== null).length > 0) return (
+        <PageWrapper>
+            <Title>Пусто :(</Title>
+        </PageWrapper>
+    )
     return(
         <ThemeProvider theme={theme}>
         <PageWrapper>
             <Container>
                 {this.props.store.whishlist.getAll.map(id => {
+                    if (id === null) return null
                     return <Query
                         key={id}
                         query={
                             gql`query MyProductCategory($id: ID!){
                           product(id: $id){
+                            _id
                             photos{
                               url
                             }
@@ -103,6 +110,14 @@ render() {
     )
     }
 }
+const Title = styled.h1`
+    margin: 100px auto;
+    display: block;
+    font-size: 30pt;
+    text-align: center;
+    color: #b4b4b4;
+`;
+
 const Container = styled.div`
     display: grid;
     justify-items: center;

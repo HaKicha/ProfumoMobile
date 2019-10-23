@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome/index";
+import {faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons/index";
 import {Link} from "react-router-dom";
 
 export default class Category extends React.Component {
@@ -28,12 +28,12 @@ render() {
             </Title>
             {this.props.data.children? <Body opened={this.state.opened}>
                 {this.props.data.children.map(elem => <Pane to={'/catalog/'+elem.key} key={elem.key} onClick={this.props.closePane}>{elem.label}</Pane>)}
-                <Pane to={'/catalog/' + this.props.data.key} onClick={this.props.closePane}>Все в категории {this.props.data.label}</Pane>
+                <Pane to={'/catalog/' + this.props.data.key} >Все в категории {this.props.data.label}</Pane>
             </Body>:null}
         </div>
     )
     return (
-        <Pane to={'/catalog/' + this.props.data.key} onClick={this.props.closePane}>{this.props.data.label}</Pane>
+        <Pane to={'/catalog/' + this.props.data.key}>{this.props.data.label}</Pane>
     )
     }
 }
@@ -43,7 +43,7 @@ const Title = styled.div`
     line-height: 40px;
     vertical-align: middle;
     font-size: 12pt;
-    color: #fff;
+    color: #000;
     padding-left: 10px;
     width: calc(100% - 10px);
     display: grid;
@@ -77,7 +77,7 @@ const Pane = styled(Link)`
     line-height: 40px;
     vertical-align: middle;
     font-size: 12pt;
-    color: #fff;
+    color: #000;
     width: calc(100% - 10px);
     padding-left: 10px;
     display: grid;

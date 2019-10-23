@@ -1,4 +1,5 @@
 import {action, observable, computed, toJS} from "mobx";
+import {ModifyCart} from "../api/Cart";
 
 export default class CartStore {
 
@@ -11,10 +12,7 @@ export default class CartStore {
     }
 
     @observable
-    cart = [
-        {_id: "5da73cc31917cf2906fbaf95", count: 1},
-        {_id: "5da375c61917cf2906fbaf14", count: 2}
-        ];
+    cart = [];
 
 // {
 //     _id: string
@@ -31,6 +29,7 @@ export default class CartStore {
             _id: id,
             count: count
         })
+        ModifyCart(toJS(this.cart))
     }
 
     getCount(id){
@@ -46,11 +45,19 @@ export default class CartStore {
             if (elem._id === id)  elem.count = count;
             return elem;
         })
+        ModifyCart(toJS(this.cart))
     }
 
     @action
     remove(id){
         this.cart = this.cart.filter(elem => elem._id !== id)
+        ModifyCart(toJS(this.cart))
+
+    }
+
+    @action
+    addMany(data){
+        this.cart.push(...data)
     }
 
     @computed

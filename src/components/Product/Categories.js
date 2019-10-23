@@ -16,6 +16,7 @@ export default class Categories extends React.Component {
                     <Query query={
                         gql`query MyProductCategory($id: ID!){
                           product(id: $id){
+                            _id
                             category {
                               name_ru
                               _id

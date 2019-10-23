@@ -43,6 +43,7 @@ export default class Cart extends React.Component {
 
     render() {
         if (!this.state.isLoading) this.updateCart();
+        if (this.props.store.cart.getAll.length > 0)
         return(
             <PageWrapper>
                 {this.state.isLoading?<Preloader/>:<Container>
@@ -57,6 +58,11 @@ export default class Cart extends React.Component {
                 </BottomPane>
             </PageWrapper>
         )
+        else return (
+            <PageWrapper>
+                <Title>Пусто :(</Title>
+            </PageWrapper>
+        )
         }
     }
 
@@ -65,6 +71,15 @@ const Container = styled.div`
     padding: 20px 20px 100px 20px;
     
 `;
+
+const Title = styled.h1`
+    margin: 100px auto;
+    display: block;
+    font-size: 30pt;
+    text-align: center;
+    color: #b4b4b4;
+`;
+
 
 const BottomPane = styled.div`
     display: grid;

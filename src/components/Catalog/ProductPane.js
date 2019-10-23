@@ -8,7 +8,9 @@ import gql from 'graphql-tag';
 import {UrlStore} from '../../stores/UrlStore'
 import {AnimatedIcon} from "../../stores/AnimatedObjectStore";
 import {Link} from "react-router-dom";
+import {inject} from "mobx-react";
 
+@inject('store')
 export default class ProductPane extends React.Component {
     render(){
         if (this.props.productId)
@@ -67,8 +69,8 @@ export default class ProductPane extends React.Component {
                                     <Submenu
                                         className={'submenu'}
                                     >
-                                        <li>В избранное</li>
-                                        <li>В корзину</li>
+                                        <li onClick={() => this.props.store.whishlist.add(this.props.productId)}>В избранное</li>
+                                        <li onClick={() => this.props.store.cart.add(this.props.productId)}>В корзину</li>
                                     </Submenu>
                                     <Rating>
                                         {rating > 0? <StarRatings

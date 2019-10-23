@@ -1,4 +1,4 @@
-import {getAuthData} from "../controllers/Cookies";
+import {getAuthData} from "../modules/LocalStorageWorker";
 import {UrlStore} from "../stores/UrlStore";
 
 export async function getRecomened(isAuthorized) {

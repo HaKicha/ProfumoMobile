@@ -6,13 +6,15 @@ import {Link} from "react-router-dom";
 import {Login as SendLoginData} from "../../api/Auth";
 import {history} from "../App";
 import routes from '../../stores/routes';
+import Preloader from "../public/Preloader";
 
 export default class Login extends React.Component {
 
     constructor(props){
         super(props);
         this.state = {
-            isPassCorrect: true
+            isPassCorrect: true,
+            loading: false
         };
         this.login = '';
         this.password = '';
@@ -27,13 +29,16 @@ export default class Login extends React.Component {
 
     send(e){
         e.preventDefault();
+        this.setState({loading: true})
         SendLoginData(this.login, this.password).then(data => {
-            if (typeof data === "undefined") this.setState({isPassCorrect: false});
+            console.log(data);
+            if (!data) this.setState({isPassCorrect: false, loading: false});
             else history.push(routes.MAIN)
         })
     }
 
 render() {
+        if (this.state.loading) return <Preloader/>
     return(
         <ThemeProvider theme={theme}>
             <Container onSubmit={() => {}}>

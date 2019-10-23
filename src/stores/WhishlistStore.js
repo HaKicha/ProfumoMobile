@@ -22,6 +22,11 @@ export default class WhishlistStore {
         UpdateWhishlist(toJS(this.whishlist));
     }
 
+    @observable
+    has(id){
+        return (this.whishlist.filter(elem => elem === id).length > 0)
+    }
+
    @computed
    get getAll(){
         return toJS(this.whishlist);

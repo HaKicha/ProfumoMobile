@@ -1,9 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import {getCategoryTree} from "../../../api/Categories";
+import {getCategoryTree} from "../../api/Categories";
 import Category from "./Category";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChevronUp, faChevronDown} from "@fortawesome/free-solid-svg-icons";
 
 
 export default class Catalog extends React.Component {

@@ -145,6 +145,7 @@ const Textarea = styled.div`
         height: 100px;
         padding: 10px 20px;
         border: none;
+        font-family: "Gilroy" !important;
         border-radius: 10px;
         box-shadow: 0 0 1px 1px #b2b2b2,  0 0 1px 1px #b2b2b2 inset;
         outline: none;

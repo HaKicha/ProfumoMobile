@@ -28,7 +28,7 @@ export default class Footer extends React.Component{
                         />
                     </CartButton>
                     <Pane>
-                        <ButtonContainer to={this.props.store.userStore.isLogged?routes.PURCHASE_HISTORY:routes.SIGN_IN}>
+                        <ButtonContainer to={routes.CATEGORY_NAVIGATION}>
                             <AnimatedIcon
                                 height={'26px'}
                                 width={'26px'}
