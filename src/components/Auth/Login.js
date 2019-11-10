@@ -1,12 +1,14 @@
 import React from 'react';
 import styled, {ThemeProvider} from 'styled-components';
 import {theme} from "../../stores/StyleStore";
-import Logo from '../../resources/image/Logo_dark.svg';
+import ImgLogo from '../../resources/image/Logo_dark.svg';
 import {Link} from "react-router-dom";
 import {Login as SendLoginData} from "../../api/Auth";
 import {history} from "../App";
 import routes from '../../stores/routes';
 import Preloader from "../public/Preloader";
+import ReactGA from 'react-ga';
+import MetaTags from "react-meta-tags";
 
 export default class Login extends React.Component {
 
@@ -23,6 +25,10 @@ export default class Login extends React.Component {
         this.send = this.send.bind(this);
     }
 
+    componentWillMount() {
+        ReactGA.pageview(location.pathname);
+    }
+
     inputHandler(e){
         this[e.target.name] = e.target.value;
     }
@@ -31,7 +37,6 @@ export default class Login extends React.Component {
         e.preventDefault();
         this.setState({loading: true})
         SendLoginData(this.login, this.password).then(data => {
-            console.log(data);
             if (!data) this.setState({isPassCorrect: false, loading: false});
             else history.push(routes.MAIN)
         })
@@ -42,7 +47,12 @@ render() {
     return(
         <ThemeProvider theme={theme}>
             <Container onSubmit={() => {}}>
-                <Image src={Logo}/>
+                <MetaTags>
+                    <title>Вход</title>
+                </MetaTags>
+                <Logo to={routes.MAIN}>
+                    <Image src={ImgLogo}/>
+                </Logo>
                 <InputContainer>
                     <input type="text" name={'login'} placeholder={"Номер телефона или E-mail"} onChange={this.inputHandler}/>
                     <span/>
@@ -78,6 +88,13 @@ const Image = styled.img`
     justify-self: center;
     align-self: end;
     object-fit: contain; 
+`;
+
+const Logo = styled(Link)`
+    margin: 0 auto;
+    justify-self: center;
+    align-self: end;
+    display: grid;
 `;
 
 const InputContainer = styled.div`

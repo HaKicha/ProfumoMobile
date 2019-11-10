@@ -24,7 +24,7 @@ export default class SessionCartStore {
     @action
     setCount(id, count){
         this.cart = this.cart.map(elem => {
-            if (elem._id !== id) return elem;
+            if (elem.product._id !== id) return elem;
             let a = elem;
             a.count = count;
             return a;
@@ -39,9 +39,9 @@ export default class SessionCartStore {
     @computed
     get summary(){
         return this.cart.reduce((acc,el) => {
-            if (el.amount <= 0 && !el.avaliable) return acc;
-            if (el.discount_price > 0) return acc + el.discount_price * el.count;
-            return acc + el.price * el.count;
+            if (el.product.amount <= 0 && !el.product.avaliable) return acc;
+            if (el.product.discount_price > 0) return acc + el.product.discount_price * el.count;
+            return acc + el.product.price * el.count;
         },0)
     }
 

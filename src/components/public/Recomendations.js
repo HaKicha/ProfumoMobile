@@ -43,7 +43,7 @@ export default class Recomendations extends React.Component {
 
         return(
             <Container>
-                <Title>Самые популярные товары</Title>
+                <Title>Часто ищут</Title>
                 <Swiper
                     navigation={true}
                     pagination={false}

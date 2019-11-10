@@ -6,6 +6,7 @@ import {theme} from "../../stores/StyleStore";
 import {addComment} from "../../api/Comments";
 import {history} from "../App";
 import {Link} from "react-router-dom";
+import ReactGA from 'react-ga';
 
 export default class AddComment extends React.Component {
 
@@ -17,6 +18,10 @@ export default class AddComment extends React.Component {
         }
         this.id = props.match.params.id;
         this.text = '';
+    }
+
+    componentWillMount() {
+        ReactGA.pageview(location.pathname);
     }
 
     setRating = grade =>  {this.setState({rating: grade})}

@@ -3,8 +3,6 @@ import styled, {ThemeProvider} from 'styled-components';
 import {theme} from "../../stores/StyleStore";
 import {Query} from "react-apollo";
 import gql from "graphql-tag";
-import Header from "../public/Header";
-import Footer from "../public/Footer";
 import {sendFeedback} from "../../api/Feedback";
 import MetaTags from "react-meta-tags";
 import marked from 'marked'
@@ -13,6 +11,7 @@ import whatsap from "../../resources/image/SocialIcons/whatsap.png";
 import telegram from "../../resources/image/SocialIcons/telegram.png";
 import PageWrapper from "../public/PageWrapper";
 import Preloader from "../public/Preloader";
+import ReactGA from 'react-ga';
 
 export default class Contacts extends React.Component {
 
@@ -33,6 +32,7 @@ export default class Contacts extends React.Component {
     }
 
     componentWillMount() {
+        ReactGA.pageview(location.pathname);
         window.scrollTo(0,0);
     }
 

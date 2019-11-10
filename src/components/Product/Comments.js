@@ -8,7 +8,7 @@ import {inject, observer} from "mobx-react";
 @observer
 export default class Comments extends React.Component {
 
-    componentWillUpdate(nextProps, nextState, nextContext) {
+    componentWillMount(nextProps, nextState, nextContext) {
         this.props.refetch();
     }
 

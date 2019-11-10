@@ -40,8 +40,17 @@ import BlogCatalog from "./Blog/BlogCatalog";
 import BlogPage from "./Blog/BlogPage";
 import AddComment from "./Product/AddComment";
 import {GetCart} from "../api/Cart";
-import {UpdateWhishlist} from "../api/WishList";
 import AboutUs from "./AboutUs/AboutUs";
+import Search from "./Search/Search";
+import CheckoutStore from "../stores/CheckoutStore";
+import AcceptOrder from "./Checkout/AcceptOrder";
+import AcceptAddress from "./Checkout/AcceptAddress";
+import AcceptPayment from "./Checkout/AcceptPayment";
+import CheckoutCompleteNP from "./Checkout/CheckoutCompleteNP";
+import CheckoutLiqPayRedirect from "./Checkout/CheckoutLiqPayRedirect";
+import CheckoutCompleteLiqPay from "./Checkout/CheckoutCompleteLiqPay";
+import ReactGA from 'react-ga';
+
 
 const httpLink = createHttpLink({
     uri: UrlStore.MAIN_GRAPHQL_URI
@@ -62,12 +71,15 @@ const stores = {
     cart: cartStore,
     sessionCart: new SessionCartStore(),
     userStore: userStore,
-    whishlist: whishlist
+    whishlist: whishlist,
+    checkoutStore: new CheckoutStore()
 }
 
 class App extends Component {
 
     componentWillMount() {
+        ReactGA.initialize('UA-128259482-2');
+
         me().then(data => {
             if (data) {
                 userStore.setUser(data);
@@ -106,6 +118,13 @@ class App extends Component {
                         <Route exact path={routes.BLOG_PAGE} component={BlogPage}/>
                         <Route path={routes.ADD_COMMENT} component={AddComment}/>
                         <Route path={routes.ABOUT_US} component={AboutUs}/>
+                        <Route path={routes.GLOBAL_SEARCH} component={Search}/>
+                        <Route path={routes.CHECKOUT_ORDER} component={AcceptOrder}/>
+                        <Route path={routes.CHECKOUT_ADDRESS} component={AcceptAddress}/>
+                        <Route path={routes.CHECKOUT_PAYMENT} component={AcceptPayment}/>
+                        <Route path={routes.CHECKOUT_COMPLETE_NOVA_POSHTA} component={CheckoutCompleteNP}/>
+                        <Route path={routes.CHECKOUT_REDIRECT_LIQPAY} component={CheckoutLiqPayRedirect}/>
+                        <Route path={routes.CHECKOUT_COMPLETE_LIQPAY} component={CheckoutCompleteLiqPay}/>
                     </Router>
                 </Provider>
             </ApolloProvider>

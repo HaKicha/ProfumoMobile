@@ -2,7 +2,6 @@ import React from 'react';
 import styled, {ThemeProvider} from 'styled-components';
 import {faHeart, faShareAlt} from "@fortawesome/free-solid-svg-icons/index";
 import {theme} from "../../stores/StyleStore";
-import '@material/button/dist/mdc.button.min.css'
 import StarRatings from 'react-star-ratings'
 import PhotoGallery from "./PhotoGallery";
 import {AnimatedIcon, AnimatedButton} from "../../stores/AnimatedObjectStore";
@@ -15,6 +14,9 @@ import Characters from "./Characters";
 import Comments from "./Comments";
 import Preloader from "../public/Preloader";
 import {inject, observer} from "mobx-react";
+import ReactGA from 'react-ga';
+import MetaTags from "react-meta-tags";
+import Shares from "./Shares";
 
 @inject('store')
 @observer
@@ -24,17 +26,26 @@ export default class Product extends React.Component{
         super(props);
         this.state = {
             currentView: 'about',
-            isFavorite: props.store.whishlist.has(props.match.params.id)
+            isFavorite: props.store.whishlist.has(props.match.params.id),
+            shareOpen: false
         }
         this.refetch = () => {};
+        this.toggleShares = this.toggleShares.bind(this);
     }
 
+    componentWillMount() {
+        ReactGA.pageview(location.pathname);
+    }
 
+    toggleShares(){
+        this.setState(oldState => ({shareOpen: !oldState.shareOpen}))
+    }
 
     render() {
         return(
             <PageWrapper>
                 <ThemeProvider theme={theme}>
+                    <React.Fragment>
                     <Query
                         query={PRODUCT_QUERY}
                         variables={{"id": this.props.match.params.id}}
@@ -62,6 +73,9 @@ export default class Product extends React.Component{
                             else price = <Price>{data.product.price} грн.</Price>
                             return(
                                 <Container>
+                                    <MetaTags>
+                                        <title>{data.product.name_ru}</title>
+                                    </MetaTags>
                                     <Title>{data.product.name_ru}</Title>
                                     <PhotoGallery images={images}/>
                                     <PriceBlock>
@@ -112,7 +126,7 @@ export default class Product extends React.Component{
                                                         text: data.product.vendor,
                                                         url: location.href
                                                     }).then(a => console.log(a));
-                                                }
+                                                } else this.toggleShares()
                                             }}
                                         />
                                     </ButtonsBlock>
@@ -133,12 +147,15 @@ export default class Product extends React.Component{
                                     {this.state.currentView === 'about' && <About product={data.product}/>}
                                     {this.state.currentView === 'characters' && <Characters product={data.product}/>}
                                     {this.state.currentView === 'comments' && <Comments
+                                        key={Math.random()}
                                         product={data.product}
                                         refetch={refetch.bind(this)} />}
                                 </Container>
                             )
                         }}
                     </Query>
+                    <Shares open={this.state.shareOpen} toggle={this.toggleShares}/>
+                    </React.Fragment>
                 </ThemeProvider>
             </PageWrapper>
         )

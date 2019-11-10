@@ -12,8 +12,10 @@ const AnimatedIcon = styled(FontAwesomeIcon)`
     color: ${props => props.color || 'white'};
     align-self: center;
     justify-self: center;
-    height: ${props => props.height||'30px'};
-    min-width: ${props => props.width||'30px'};
+    width: 100% !important;
+    height: 100% !important;
+    max-height: ${props => props.height||'30px'} !important;
+    max-width: ${props => props.width||'30px'} !important;
     padding: ${props => props.padding||'7px'};;
     transition: all ${props => props.duration || '.5s'};
     border-radius: 50%;

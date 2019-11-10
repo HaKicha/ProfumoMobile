@@ -12,6 +12,9 @@ import {UrlStore} from "../../stores/UrlStore";
 import Categories from '../Product/Categories';
 import {faTimes, faCartPlus} from "@fortawesome/free-solid-svg-icons";
 import {AnimatedIcon} from "../../stores/AnimatedObjectStore";
+import {compact} from 'lodash';
+import ReactGA from 'react-ga';
+import MetaTags from "react-meta-tags";
 
 @inject('store')
 @observer
@@ -21,18 +24,28 @@ export default class Whishlist extends React.Component {
         this.props.store.whishlist.remove(id)
     }).bind(this);
 
+    componentWillMount() {
+        ReactGA.pageview(location.pathname);
+    }
 
-render() {
-    if (!this.props.store.whishlist.getAll.filter(el => el !== null).length > 0) return (
+    render() {
+    if (!compact(this.props.store.whishlist.getAll).length > 0) return (
         <PageWrapper>
+            <MetaTags>
+                <title>Избранное</title>
+            </MetaTags>
             <Title>Пусто :(</Title>
         </PageWrapper>
     )
+
     return(
         <ThemeProvider theme={theme}>
         <PageWrapper>
+            <MetaTags>
+                <title>Избранное</title>
+            </MetaTags>
             <Container>
-                {this.props.store.whishlist.getAll.map(id => {
+                {compact(this.props.store.whishlist.getAll).map(id => {
                     if (id === null) return null
                     return <Query
                         key={id}

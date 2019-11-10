@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, {ThemeProvider} from 'styled-components';
+import styled, {keyframes, ThemeProvider} from 'styled-components';
 import ProductPane from "./ProductPane";
 import SearchInput from "../public/SearchInput";
 import PageWrapper from "../public/PageWrapper";
@@ -18,6 +18,8 @@ import {theme} from "../../stores/StyleStore";
 import {parseCategory} from "../../modules/CategoryPreprocessor";
 import {clone} from 'lodash'
 import Recomendations from "../public/Recomendations";
+import ReactGA from 'react-ga';
+import MetaTags from "react-meta-tags";
 
 @inject('store')
 @observer
@@ -54,6 +56,7 @@ export default class Catalog extends React.Component {
     }
 
     componentWillMount() {
+        ReactGA.pageview(location.pathname);
         this.updateIdentifiers(this.props.match.params.id);
     }
 
@@ -91,7 +94,7 @@ export default class Catalog extends React.Component {
                 this.props.store.filters.addProperties(...parseCategory(data))
                 identifiers.push(expr);
                 identifiers.push(...data.child.map(elem => elem._id));
-                this.setState({identifiers: identifiers, isLoading: false, stringSearch: false});
+                this.setState({identifiers: identifiers, isLoading: false, stringSearch: false, idSearch: true});
             });
         }
 
@@ -123,6 +126,9 @@ export default class Catalog extends React.Component {
         }
         return (
             <PageWrapper>
+                <MetaTags>
+                    <title>Каталог товаров</title>
+                </MetaTags>
                 <HeadBlock>
                     <SearchInput productId={this.props.match.params.id.split('&')[0]}/>
                     <AnimatedButton {...ButtonParams} onClick={this.toggleFiters}>Фильтры</AnimatedButton>
@@ -147,22 +153,11 @@ export default class Catalog extends React.Component {
                     {({loading, error, data}) => {
                         if (loading) return <Preloader/>
                         if (error) return <p/>
+                        if (data.products.length === 0) return  <Title>По вашему запросу ничего не найдено :(</Title>
                         this.updateCount(filtersJson);
-                        let buffer = data.products.reduce((acc,el,index) => {
-                            if (index % 2 === 0){
-                                acc[Math.floor(index / 2)] = [el._id];
-                                return acc;
-                            } else  acc[Math.floor(index / 2)].push(el._id);
-                            return  acc;
-                        },[]);
                         return (
                             <Content>
-                               <tbody>
-                               {buffer.map(el => <tr key={el[0] + el[1]}>
-                                   <ProductPane productId={el[0]}/>
-                                   <ProductPane productId={el[1]}/>
-                               </tr>)}
-                               </tbody>
+                               {data.products.map(el => <ProductPane productId={el._id} key={el._id}/>)}
                             </Content>
                         )
                     }}
@@ -196,29 +191,32 @@ export default class Catalog extends React.Component {
 }
 
 const ButtonParams = {
-    color: '#767676',
+    color: '#424242',
     height: '50px',
     width: '50%',
     borderRadius: '0',
     background: 'rgba(0,0,0,0)',
     fontSize: '14pt',
-    otherStyles: 'display: inline-block;'
+    otherStyles: 'display: inline-block; text-shadow: 1px 1px 2px #767676; font-weight: bold;'
 }
 
-const Content = styled.table`
-  display: table;
-  width: 100vw;
-  margin-top: 90px;
-  padding-left: 5px;
-  padding-bottom: 80px;
+
+
+const Content = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: calc(100vw - 30px);
+  padding: 10px 15px 80px 15px;
+  margin-top: 100px;
   overflow-x: hidden;
+  grid-auto-rows: 269px;
 `
 
 const HeadBlock = styled.div`
   background: #fff;
   position: fixed;
   top: 50px;
-  z-index: 2;
+  z-index: 5;
   width: 100vw;
 `
 
@@ -259,4 +257,11 @@ const PaginationContainer = styled.div`
     
 `;
 
-//{"variables":{"filters":{"_q":"Помада","properties":{"_id":["5da403cf1917cf2906fbaf23"]}},"limit":18,"sortingOrder":"rating:asc","start":0}}
+const Title = styled.h1`
+    margin: 100px auto;
+    display: block;
+    font-size: 20pt;
+    padding: 20px;
+    text-align: center;
+    color: #b4b4b4;
+`;

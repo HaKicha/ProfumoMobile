@@ -23,5 +23,12 @@
   "BLOG_CATALOG": "/blog",
   "BLOG_PAGE": "/blog/:id",
   "ADD_COMMENT": "/addComment/:id",
-  "ABOUT_US": "/aboutUs"
+  "ABOUT_US": "/aboutUs",
+  "CHECKOUT_ORDER": "/checkout/order",
+  "CHECKOUT_ADDRESS": "/checkout/address",
+  "CHECKOUT_PAYMENT": "/checkout/payment",
+  "CHECKOUT_COMPLETE_NOVA_POSHTA": "/checkout/complete/np",
+  "CHECKOUT_REDIRECT_LIQPAY": "/checkout/redirect/lp",
+  "CHECKOUT_COMPLETE_LIQPAY": "/order",
+  "CHECKOUT_COMPLETE_": "/checkout/complete/np"
 }

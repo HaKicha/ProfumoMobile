@@ -1,7 +1,6 @@
 const webpack = require("webpack");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 
 module.exports = {
@@ -45,20 +44,9 @@ module.exports = {
         ]
     },
     plugins: [
-        new CleanWebpackPlugin(['dist']),
         new HtmlWebpackPlugin({
             template: './src/index.html'
-        }),
-        new webpack.HotModuleReplacementPlugin()
-    ],
-    devServer: {
-        hot: true,
-        inline: true,
-        contentBase: './',
-        historyApiFallback: true,
-        watchOptions: {
-            ignored: /\/node_modules\/.*/
-        }
-    }
+        })
+    ]
 
 };

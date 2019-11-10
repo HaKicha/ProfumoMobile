@@ -5,6 +5,8 @@ import Logo from '../../resources/image/Logo_dark.svg';
 import {Link} from "react-router-dom";
 import {forgotPassword as SendEmail} from '../../api/Auth';
 import routes from '../../stores/routes';
+import ReactGA from 'react-ga';
+import MetaTags from "react-meta-tags";
 
 export default class ForgotPassword extends React.Component {
 
@@ -22,6 +24,10 @@ export default class ForgotPassword extends React.Component {
         this.send = this.send.bind(this);
     }
 
+    componentWillMount() {
+        ReactGA.pageview(location.pathname);
+    }
+
     inputHandler(e){
         this[e.target.name] = e.target.value;
     }
@@ -37,6 +43,9 @@ export default class ForgotPassword extends React.Component {
     render() {
 
         let sendEmailForm = <React.Fragment>
+            <MetaTags>
+                <title>Сброс пароля</title>
+            </MetaTags>
             <h1>Сброс пароля</h1>
             <Info>Для сброса пароль укажите пожалуста свой Email</Info>
             <InputContainer warning={this.state.error}>

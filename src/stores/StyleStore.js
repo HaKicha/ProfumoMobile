@@ -5,7 +5,7 @@ const theme = {
     info : '#3F808C',
     warning : '#E3A264',
     success : '#4CAC61',
-    bgCol: '#222328',
+    bgCol: '#000000',
     bgDarkCol: '#0d0e11'
 };
 

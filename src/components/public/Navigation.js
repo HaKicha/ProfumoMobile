@@ -27,7 +27,9 @@ export default class Navigation extends React.Component{
                     onClick={this.props.closePane}
                 >
                     <FontAwesomeIcon icon={faUserCircle}/>
-                    <span>Кабинет</span>
+                    <span>{this.props.store.userStore.isLogged?
+                        this.props.store.userStore.User.name + ' ' + this.props.store.userStore.User.surname
+                        :"Войти в личный кабинет"}</span>
                 </Pane>
                 <Pane to={routes.CATEGORY_NAVIGATION}
                       onClick={this.props.closePane}>

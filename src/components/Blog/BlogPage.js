@@ -2,18 +2,17 @@ import React from 'react';
 import styled from 'styled-components';
 import gql from "graphql-tag";
 import {Query} from "react-apollo";
-import Header from "../public/Header";
-import Footer from "../public/Footer";
 import ReactMarkdown from 'react-markdown';
 import RecomendedBlock from "./RecomendedBlock";
 import {UrlStore} from "../../stores/UrlStore";
 import MetaTags from 'react-meta-tags';
 import PageWrapper from "../public/PageWrapper";
-// import Recomendations from "../public/Recomendations";
+import ReactGA from 'react-ga';
 
 export default class BlogPage extends React.Component {
 
     componentWillUpdate() {
+        ReactGA.pageview(location.pathname);
         window.scrollTo(0,0);
     }
 

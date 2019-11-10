@@ -6,6 +6,7 @@ export default class CartStore {
     constructor(){
         this.has = this.has.bind(this);
         this.add = this.add.bind(this);
+        this.clear = this.clear.bind(this);
         this.remove = this.remove.bind(this);
         this.getCount = this.getCount.bind(this);
         this.setCount = this.setCount.bind(this);
@@ -53,6 +54,11 @@ export default class CartStore {
         this.cart = this.cart.filter(elem => elem._id !== id)
         ModifyCart(toJS(this.cart))
 
+    }
+
+    @action
+    clear(){
+        this.cart = [];
     }
 
     @action

@@ -4,6 +4,11 @@ import PageWrapper from "../../public/PageWrapper";
 import {inject, observer} from "mobx-react";
 import Order from "./Order";
 import {theme} from "../../../stores/StyleStore";
+import {Redirect} from "react-router";
+import routes from "../../../stores/routes";
+import ReactGA from 'react-ga';
+import history from "../../../resources/image/cabinet/history.svg";
+import MetaTags from "react-meta-tags";
 
 @inject('store')
 @observer
@@ -18,14 +23,24 @@ export default class PurchaseHistory extends React.Component {
         this.setFilters = this.setFilters.bind(this);
     }
 
+    componentWillMount() {
+        ReactGA.pageview(location.pathname);
+    }
+
     setFilters = e => {
         this.setState({currentFilter: e.target.value - 0})
     }
 
 
     render() {
-    return(
+        setTimeout(() => {
+            if (!this.props.store.userStore.isLogged) history.push(routes.SIGN_IN);
+        }, 2500);
+        return(
         <PageWrapper>
+            <MetaTags>
+                <title>История покупок</title>
+            </MetaTags>
             <Container>
                 <Menu>
                     <Li value={'1'} onClick={this.setFilters} active={this.state.currentFilter === 1}>Все</Li>
@@ -36,7 +51,7 @@ export default class PurchaseHistory extends React.Component {
                     if (this.state.currentFilter === 1) return true;
                     else if (this.state.currentFilter === 2) return new Date(order.createdAt).getMonth() === new Date().getMonth() && new Date(order.createdAt).getFullYear() === new Date().getFullYear()
                     else return new Date(order.createdAt).getFullYear() === new Date().getFullYear()
-                }).map(order => <Order order={order} key={order._id}/>)}
+                }).reverse().map(order => <Order order={order} key={order._id}/>)}
             </Container>
         </PageWrapper>
     )

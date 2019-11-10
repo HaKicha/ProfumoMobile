@@ -96,7 +96,8 @@ const Container = styled.div`
     width: 100%;
     margin-bottom: 5px;
     border-bottom: 1px solid #ccc;
-    
+    max-width: 100vw;
+    overflow-x: hidden;
 `;
 
 const Info = styled.div`

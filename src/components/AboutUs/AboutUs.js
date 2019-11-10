@@ -9,10 +9,12 @@ import {UrlStore} from "../../stores/UrlStore";
 import MetaTags from 'react-meta-tags';
 import Preloader from "../public/Preloader";
 import PageWrapper from "../public/PageWrapper";
+import ReactGA from 'react-ga';
 
 export default class AboutUs  extends React.Component{
 
     componentWillMount() {
+        ReactGA.pageview(location.pathname);
         window.scrollTo(0,0);
     }
 

@@ -1,17 +1,39 @@
 import React from 'react';
-import styled, {ThemeProvider} from 'styled-components';
-import {faEllipsisV} from "@fortawesome/free-solid-svg-icons";
+import styled, {keyframes, ThemeProvider} from 'styled-components';
+import {faCartPlus, faHeart} from "@fortawesome/free-solid-svg-icons";
 import StarRatings from 'react-star-ratings';
 import {theme} from "../../stores/StyleStore";
 import Query from "react-apollo/Query";
 import gql from 'graphql-tag';
 import {UrlStore} from '../../stores/UrlStore'
 import {AnimatedIcon} from "../../stores/AnimatedObjectStore";
-import {Link} from "react-router-dom";
 import {inject} from "mobx-react";
+import {history} from "../App";
 
 @inject('store')
 export default class ProductPane extends React.Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            focused: false
+        }
+        this.focusHandler = this.focusHandler.bind(this);
+        this.blurHandler = this.blurHandler.bind(this);
+        this.block = React.createRef();
+    }
+
+
+    focusHandler(e){
+        setTimeout(() => {
+            this.setState({focused: true})
+        }, 400)
+    }
+
+    blurHandler(e){
+        this.setState({focused: false})
+    }
+
     render(){
         if (this.props.productId)
         return(
@@ -51,27 +73,37 @@ export default class ProductPane extends React.Component {
                         let rating = 0;
                         if (data.product.comments.length > 0)
                             rating = data.product.comments.reduce((acc,el) => {return acc + el.rate},0) / data.product.comments.length;
+                        let height = 0;
+                        if (rating > 0) height += 20;
+                        if (data.product.discount_price > 0) height += 30;
+                        const BlockHover = keyframes`
+                              0% { 
+                                box-shadow: 0 0 0 0 ${theme.primary};
+                                height: calc(230px + ${height}px);
+                              }
+                              100%  { 
+                                box-shadow: 0 0 5px 0 ${theme.primary};
+                                height: calc(270px + ${height}px);
+                              }
+                            `;
+
                         return(
-                            <td>
-                                <Container>
-                                    <Link to={'/product/' + this.props.productId}>
-                                        <Image src={UrlStore.MAIN_URL + data.product.photos[0].url} loading={'lazy'}/>
-                                    </Link>
-                                    <Name to={'/product/' + this.props.productId}>{data.product.name_ru}</Name>
+                                <Container 
+                                    onFocus={this.focusHandler}
+                                    onBlur={this.blurHandler}
+                                    tabIndex={0}
+                                    ref={this.block}
+                                    animation={BlockHover}
+                                >
+                                        <Image src={UrlStore.MAIN_URL + data.product.photos[0].url} loading={'lazy'} onClick={() => {
+                                            if (this.state.focused) history.push('/product/' + this.props.productId);
+                                            else this.block.current.focus()
+                                        }}/>
+                                    <Name  onClick={() => {
+                                        if (this.state.focused) history.push('/product/' + this.props.productId);
+                                        else this.block.current.focus()
+                                    }}>{data.product.name_ru}</Name>
                                     {price}
-                                    <ControlButton
-                                        icon={faEllipsisV}
-                                        color={'#6f6f6f'}
-                                        duration={'0.5s'}
-                                        size={'sm'}
-                                        tabIndex={'0'}
-                                    />
-                                    <Submenu
-                                        className={'submenu'}
-                                    >
-                                        <li onClick={() => this.props.store.whishlist.add(this.props.productId)}>В избранное</li>
-                                        <li onClick={() => this.props.store.cart.add(this.props.productId)}>В корзину</li>
-                                    </Submenu>
                                     <Rating>
                                         {rating > 0? <StarRatings
                                             rating={rating}
@@ -83,8 +115,11 @@ export default class ProductPane extends React.Component {
                                         />:<span/>}
                                         {rating > 0?<span>Отзывов: {data.product.comments_len}</span>:<span/>}
                                     </Rating>
+                                    {this.state.focused && <IconsBlock>
+                                        <AnimatedIcon icon={faCartPlus} color={theme.primary} onClick={() => {this.props.store.cart.add(this.props.productId)}}/>
+                                        <AnimatedIcon icon={faHeart} color={theme.primary}  onClick={() => {this.props.store.whishlist.add(this.props.productId, 1)}}/>
+                                    </IconsBlock>}
                                 </Container>
-                            </td>
                         );
                     }}
                 </Query>
@@ -94,17 +129,27 @@ export default class ProductPane extends React.Component {
     }
 }
 
+
+
 const Container = styled.div`
-    width: calc(50vw - 12px);
-    display: block;
-    border-left: none;
-    border-top: none;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    padding-right: 5px;
-    padding-bottom: 5px;
+    width: calc(50vw - 25px);
+    display: grid;
+    border: none;
+    justify-items: center;
+    grid-auto-rows: min-content;
+    justify-content: center;
+    padding: 5px;
     position: relative;
     text-decoration: none;
+    z-index: 2;
+    outline: none;
+    background: #fff;
+    transition: all .5s;
+    &:focus {
+        outline: none;
+        z-index: 3;
+        animation: ${props => props.animation} forwards .3s ease-in;
+    }
 `;
 
 const Image = styled.img`
@@ -114,7 +159,7 @@ const Image = styled.img`
     display: block;  
 `;
 
-const Name = styled(Link)`
+const Name = styled.span`
     white-space: pre-line;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -136,6 +181,7 @@ const Price = styled.span`
     width: max-content;
     border-radius: 5px;
     margin-top: 3px;
+    margin-bottom: 3px;
     text-decoration: none;
     &:after {
         content: " грн.";
@@ -150,7 +196,6 @@ const OldPrice = styled.span`
     text-decoration: line-through;
     width: max-content;
     margin-top: 3px;
-    text-decoration: none;
     &:after {
         content: " грн.";
     }    
@@ -164,54 +209,9 @@ const Rating = styled.div`
     align-items: end;
 `;
 
-const ControlButton = styled(AnimatedIcon)`
-    display: block;
-    position: absolute;
-    right: 0;
-    bottom: -3px;
-    outline: none;
-    div {
-        display: none;
-        opacity: 0;
-    }
-    &:focus ~ .submenu{
-        display: block;
-        opacity: 1;
-    }
-`;
-
-const Submenu = styled.ul`
-    display: none;
-    width: 100%;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    height: 90px;
-    background: #fff;
-    z-index: 1;    
-    transition: opacity 0.5s;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    box-shadow: 1px 1px 2px 2px #ccc;
-    text-decoration: none;
-    li {
-        height: 45px;
-        font-size: 12pt;
-        vertical-align: middle;
-        cursor: pointer;
-        transition: all 1.2s;
-        background-position: center;
-        line-height: 45px;
-        padding-left: 5px;
-    }
-    li:active {
-        color: ${props => props.clickedColor || 'white'};
-        background-color:  ${props => props.bgcolor||'rgba(10,10,10,0.5)'};
-        background-size: 100%;
-        transition: background 0s;
-    }
-    
-    
-    
+const IconsBlock = styled.div`
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    grid-gap: 30px;  
+    padding: 10px 0;
 `;

@@ -7,15 +7,15 @@ import {getCitiesByName, getPostOffices} from "../../api/NovaPoshta";
 import ReactSelect from 'react-select'
 import {inject, observer} from "mobx-react";
 import Preloader from "../public/Preloader";
-import {Redirect} from "react-router";
-import routes from "../../stores/routes";
+import {history} from "../App";
+import routes from '../../stores/routes';
 import ReactGA from 'react-ga';
-import history from "../../resources/image/cabinet/history.svg";
 import MetaTags from "react-meta-tags";
 
 @inject('store')
 @observer
-export default class Address extends React.Component {
+export default class AcceptAddress extends React.Component {
+
 
 
     constructor(props){
@@ -36,7 +36,6 @@ export default class Address extends React.Component {
 
         this.saveData = this.saveData.bind(this);
     }
-
 
     setPostOffice = (option => {
         this.setState({
@@ -94,12 +93,11 @@ export default class Address extends React.Component {
                     cityDescription: data.adress.cityDescription || '',
                     loading: false
                 })
-            }
+            } else  this.setState({loading: false})
         });
     }
 
     saveData = e => {
-        this.setState({loading: true})
         let data = {};
         data.name = this.state.name;
         data.surname = this.state.surname;
@@ -109,20 +107,8 @@ export default class Address extends React.Component {
         data.postOfficeName = this.state.postOfficeName;
         data.postOfficeCode = this.state.postOfficeCode;
         data.cityDescription = this.state.cityDescription;
-        changeUserData({adress: data}).then(data =>{
-            this.setState({
-                name: data.adress.name || '',
-                surname: data.adress.surname || '',
-                phone: data.adress.phone || '',
-                cityName: data.adress.cityName || '',
-                cityCode: data.adress.cityCode || '',
-                postOfficeName: data.adress.postOfficeName || '',
-                postOfficeCode: data.adress.postOfficeCode || '',
-                cityDescription: data.adress.cityDescription || '',
-                loading: false
-            })
-        });
-
+        this.props.store.checkoutStore.setAddress(data);
+        history.push(routes.CHECKOUT_PAYMENT);
     }
 
     setName = e => {
@@ -151,72 +137,70 @@ export default class Address extends React.Component {
         })
     }).bind(this);
 
-render() {
-    setTimeout(() => {
-        if (!this.props.store.userStore.isLogged) history.push(routes.SIGN_IN);
-    }, 2500);
-    if (this.state.loading) return <Preloader/>
-    return(
-        <ThemeProvider theme={theme}>
-            <PageWrapper>
-                <MetaTags>
-                    <title>Настройки доставки</title>
-                </MetaTags>
-                <Container>
-                    <h4>Редактировать профиль</h4>
-                    <InputContainer>
-                        <b>Имя</b>
-                        <input type={'text'} name={'name'} placeholder={'Имя'} defaultValue={this.state.name} onChange={this.setName}/>
-                        <span/>
-                    </InputContainer>
-                    <InputContainer>
-                        <b>Фамилия</b>
-                        <input type={'text'} name={'surname'} placeholder={'Фамилия'} defaultValue={this.state.surname} onChange={this.setSurname}/>
-                        <span/>
-                    </InputContainer>
-                    <InputContainer>
-                        <b>Телефон</b>
-                        <input type={'text'} placeholder={'Телефон'} defaultValue={this.state.phone}  onChange={this.setPhone}/>
-                        <span/>
-                    </InputContainer>
-                    <SelectContainer>
-                        <b>Город</b>
-                        <ReactSelect
-                            noOptionsMessage={() => 'Введите ваш город'}
-                            placeholder={''}
-                            styles={reactSelectStyles}
-                            onInputChange={e => {this.setCities(e)}}
-                            onChange={this.setPostOffice}
-                            options={this.state.cities}
-                            value={{
-                                label: this.state.cityName,
-                                value: this.state.cityCode
-                            }}
-                            isClearable={true}
-                            onBlur={event => event.preventDefault()}
-                        />
-                    </SelectContainer>
-                    <SelectContainer>
-                        <b>Отделение Новой Пошты</b>
-                        <ReactSelect
-                            noOptionsMessage={() => 'Выберите отделение'}
-                            placeholder={''}
-                            styles={reactSelectStyles}
-                            options={this.state.postOffices}
-                            isClearable={true}
-                            value={{
-                                label: this.state.postOfficeName,
-                                value: this.state.postOfficeCode
-                            }}
-                            onChange={this.setCurrentPostOffice}
-                            onBlur={event => event.preventDefault()}
-                        />
-                    </SelectContainer>
-                    <Button onClick={this.saveData}>Сохранить</Button>
-                </Container>
-            </PageWrapper>
-        </ThemeProvider>
-    )
+    render() {
+        if (this.state.loading) return <Preloader/>
+        return(
+            <ThemeProvider theme={theme}>
+                <PageWrapper>
+
+                    <MetaTags>
+                        <title>Доставка</title>
+                    </MetaTags>
+                    <Container>
+                        <Title>Адрес доставки (Новая почта)</Title>
+                        <InputContainer>
+                            <b>Имя</b>
+                            <input type={'text'} name={'name'} placeholder={'Имя'} defaultValue={this.state.name} onChange={this.setName}/>
+                            <span/>
+                        </InputContainer>
+                        <InputContainer>
+                            <b>Фамилия</b>
+                            <input type={'text'} name={'surname'} placeholder={'Фамилия'} defaultValue={this.state.surname} onChange={this.setSurname}/>
+                            <span/>
+                        </InputContainer>
+                        <InputContainer>
+                            <b>Телефон</b>
+                            <input type={'text'} placeholder={'Телефон'} defaultValue={this.state.phone}  onChange={this.setPhone}/>
+                            <span/>
+                        </InputContainer>
+                        <SelectContainer>
+                            <b>Город</b>
+                            <ReactSelect
+                                noOptionsMessage={() => 'Введите ваш город'}
+                                placeholder={''}
+                                styles={reactSelectStyles}
+                                onInputChange={e => {this.setCities(e)}}
+                                onChange={this.setPostOffice}
+                                options={this.state.cities}
+                                value={{
+                                    label: this.state.cityName,
+                                    value: this.state.cityCode
+                                }}
+                                isClearable={true}
+                                onBlur={event => event.preventDefault()}
+                            />
+                        </SelectContainer>
+                        <SelectContainer>
+                            <b>Отделение Новой Пошты</b>
+                            <ReactSelect
+                                noOptionsMessage={() => 'Выберите отделение'}
+                                placeholder={''}
+                                styles={reactSelectStyles}
+                                options={this.state.postOffices}
+                                isClearable={true}
+                                value={{
+                                    label: this.state.postOfficeName,
+                                    value: this.state.postOfficeCode
+                                }}
+                                onChange={this.setCurrentPostOffice}
+                                onBlur={event => event.preventDefault()}
+                            />
+                        </SelectContainer>
+                        <Button onClick={this.saveData}>Подтвердить</Button>
+                    </Container>
+                </PageWrapper>
+            </ThemeProvider>
+        )
     }
 }
 
@@ -288,10 +272,11 @@ const SelectContainer = styled.div`
     width: 100%;
 `;
 
+
 const Button = styled.button`
-    margin-top: 20px;
     display: block;
-    background: ${props => props.theme.primary};
+    background: ${theme.primary};
+    margin: 20px auto;
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.24), 0px 0px 2px rgba(0, 0, 0, 0.12);
     border-radius: 2px;
     height: 35px;
@@ -307,8 +292,17 @@ const Button = styled.button`
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0); 
     -webkit-tap-highlight-color: transparent;
     &:hover{
-         background: ${props => props.theme.primary_light};   
+         background: ${theme.primary_light};   
     }  
+`;
+
+const Title = styled.h3`
+    text-align: center;
+    margin: 10px 0;
+    padding: 0;
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+    
 `;
 
 

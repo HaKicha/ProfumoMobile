@@ -6,6 +6,11 @@ import {theme} from "../../stores/StyleStore";
 import {AnimatedRadioButton} from "../../stores/AnimatedObjectStore";
 import {changeUserData} from "../../api/User";
 import Preloader from "../public/Preloader";
+import {Redirect} from "react-router";
+import routes from "../../stores/routes";
+import ReactGA from 'react-ga';
+import history from "../../resources/image/cabinet/history.svg";
+import MetaTags from "react-meta-tags";
 
 @inject('store')
 @observer
@@ -27,6 +32,10 @@ export default class Profile extends React.Component {
         this.genderChangeHandler = this.genderChangeHandler.bind(this);
         this.inputHandler = this.inputHandler.bind(this);
         this.save = this.save.bind(this);
+    }
+
+    componentWillMount() {
+        ReactGA.pageview(location.pathname);
     }
 
     inputHandler(e){
@@ -57,6 +66,9 @@ export default class Profile extends React.Component {
 
 
     render() {
+        setTimeout(() => {
+            if (!this.props.store.userStore.isLogged) history.push(routes.SIGN_IN);
+        }, 2500);
         if (this.state.loading) return <Preloader/>
         if (this.state.gender !== this.props.store.userStore.User.gender)
             this.setState({gender: this.props.store.userStore.User.gender})
@@ -66,6 +78,9 @@ export default class Profile extends React.Component {
     return(
         <ThemeProvider theme={theme}>
             <PageWrapper>
+                <MetaTags>
+                    <title>Личные настройки</title>
+                </MetaTags>
                 <Container>
                     <h4>Редактировать профиль</h4>
                     <InputContainer>

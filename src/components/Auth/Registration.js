@@ -1,12 +1,15 @@
 import React from 'react';
 import styled, {ThemeProvider} from 'styled-components';
 import {theme} from "../../stores/StyleStore";
-import Logo from '../../resources/image/Logo_dark.svg';
+import ImgLogo from '../../resources/image/Logo_dark.svg';
 import {Link} from "react-router-dom";
 import {Register} from "../../api/Auth";
 import {history} from "../App";
 import {debounce} from "lodash";
 import {AnimatedRadioButton} from "../../stores/AnimatedObjectStore";
+import ReactGA from 'react-ga';
+import routes from "../../stores/routes";
+import MetaTags from "react-meta-tags";
 
 export default class Registration extends React.Component {
 
@@ -28,6 +31,10 @@ export default class Registration extends React.Component {
         this.inputHandler = this.inputHandler.bind(this);
         this.passInputHandler = this.passInputHandler.bind(this);
         this.send = this.send.bind(this);
+    }
+
+    componentWillMount() {
+        ReactGA.pageview(location.pathname);
     }
 
     inputHandler(e){
@@ -58,7 +65,12 @@ export default class Registration extends React.Component {
         return(
             <ThemeProvider theme={theme}>
                 <Container onSubmit={() => {}}>
-                    <Image src={Logo}/>
+                    <MetaTags>
+                        <title>Регистрация</title>
+                    </MetaTags>
+                    <Logo to={routes.MAIN}>
+                        <Image src={ImgLogo}/>
+                    </Logo>
                     <InputContainer>
                         <input
                             type={'text'}
@@ -152,6 +164,13 @@ const Container = styled.form`
     grid-gap: 25px;
     justify-items: center;
     padding-bottom: 200px;
+`;
+
+const Logo = styled(Link)`
+    margin: 0 auto;
+    justify-self: center;
+    align-self: end;
+    display: grid;
 `;
 
 const Image = styled.img`

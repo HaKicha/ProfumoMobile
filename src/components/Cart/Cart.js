@@ -8,6 +8,10 @@ import Preloader from "../public/Preloader";
 import {theme} from "../../stores/StyleStore";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRight} from "@fortawesome/free-solid-svg-icons";
+import {history} from "../App";
+import routes from '../../stores/routes';
+import ReactGA from 'react-ga';
+import MetaTags from "react-meta-tags";
 
 @inject('store')
 @observer
@@ -19,9 +23,11 @@ export default class Cart extends React.Component {
             key: '',
             isLoading: true
         }
+        this.toCheckout = this.toCheckout.bind(this);
     }
 
     componentWillMount() {
+        ReactGA.pageview(location.pathname);
         this.updateCart();
     }
 
@@ -31,7 +37,10 @@ export default class Cart extends React.Component {
             this.setState({isLoading: true, key: ids.sort().join()});
             getProductsById(ids).then(data => {
                 this.props.store.sessionCart.update(data.map(el => {
-                    el.count = this.props.store.cart.getCount(el._id)
+                    el = {
+                        product: el,
+                        count: this.props.store.cart.getCount(el._id)
+                    }
                     return el;
                 }));
                 this.setState({isLoading: false})
@@ -40,18 +49,25 @@ export default class Cart extends React.Component {
         else if (this.state.isLoading) this.setState({isLoading: false})
     }
 
+    toCheckout(){
+        this.props.store.checkoutStore.setOrder(this.props.store.sessionCart.getAll);
+        history.push(routes.CHECKOUT_ORDER);
+    }
 
     render() {
         if (!this.state.isLoading) this.updateCart();
         if (this.props.store.cart.getAll.length > 0)
         return(
             <PageWrapper>
+                <MetaTags>
+                    <title>Корзина</title>
+                </MetaTags>
                 {this.state.isLoading?<Preloader/>:<Container>
-                    {this.props.store.sessionCart.getAll.map(elem => <CartPane productId={elem._id} key={elem._id}/>)}
+                    {this.props.store.sessionCart.getAll.map(elem => <CartPane productId={elem.product._id} key={elem.product._id}/>)}
                 </Container>}
                 <BottomPane>
                     <Total>{this.props.store.sessionCart.summary} грн.</Total>
-                    <CheckoutButton>
+                    <CheckoutButton onClick={this.toCheckout}>
                         <span>Оплата</span>
                         <FontAwesomeIcon icon={faArrowRight}/>
                     </CheckoutButton>

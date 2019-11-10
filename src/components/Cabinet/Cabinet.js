@@ -13,15 +13,28 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSignOutAlt} from "@fortawesome/free-solid-svg-icons";
 import {inject, observer} from "mobx-react";
 import {Logout} from "../../api/Auth";
+import ReactGA from 'react-ga';
+import MetaTags from "react-meta-tags";
 
 @inject('store')
 @observer
 export default class Cabinet extends React.Component {
 
-render() {
+    componentWillMount() {
+        ReactGA.pageview(location.pathname);
+    }
+
+
+    render() {
+        setTimeout(() => {
+            if (!this.props.store.userStore.isLogged) history.push(routes.SIGN_IN);
+        }, 2500);
     return(
         <PageWrapper>
             <Container>
+            <MetaTags>
+                <title>{this.props.store.userStore.User.name} {this.props.store.userStore.User.surname}</title>
+            </MetaTags>
                 <UserBlock>
                     <Avatar src={this.props.store.userStore.User.gender === 'female'?female:male}/>
                     <b>{this.props.store.userStore.User.name} {this.props.store.userStore.User.surname}</b>

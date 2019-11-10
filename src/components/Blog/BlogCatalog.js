@@ -9,10 +9,12 @@ import Footer from "../public/Footer";
 import ReactPaginate from 'react-paginate';
 import MetaTags from "react-meta-tags";
 import PageWrapper from "../public/PageWrapper";
+import ReactGA from 'react-ga';
 
 export default class Catalog extends React.Component {
 
     componentWillMount() {
+        ReactGA.pageview(location.pathname);
         window.scrollTo(0,0);
     }
 

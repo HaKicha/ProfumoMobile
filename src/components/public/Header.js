@@ -1,7 +1,6 @@
 import React from 'react';
 import styled,  {ThemeProvider} from 'styled-components';
 import {theme} from "../../stores/StyleStore";
-import '@material/icon-button/dist/mdc.icon-button.min.css'
 import LogoImg from '../../resources/image/Logo.svg'
 import {faBars} from '@fortawesome/free-solid-svg-icons';
 import {AnimatedIcon} from "../../stores/AnimatedObjectStore";

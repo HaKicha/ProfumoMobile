@@ -22,7 +22,7 @@ async function Login(identifier, password) {
     if (response.status >= 200 && response.status < 400) {
         let data = await response.json();
         userStore.setUser(data.user);
-        whishlist.add(data.user.wishlist);
+        whishlist.add(...data.user.wishlist);
         setAuthData('jwt', data.jwt);
         return true;
     } else return false;

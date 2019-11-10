@@ -2,7 +2,6 @@ body {
 	margin: 0;
 	padding: 0;
 	font-family: "Gilroy", sans-serif;
-	-webkit-touch-callout: none; /* iOS Safari */
 	-webkit-user-select: none;   /* Chrome/Safari/Opera */
 	-khtml-user-select: none;    /* Konqueror */
 	-moz-user-select: none;      /* Firefox */
@@ -17,11 +16,10 @@ button{
 }
 
 input{
-	-webkit-touch-callout: default !important; /* iOS Safari */
-	-webkit-user-select: all !important;   /* Chrome/Safari/Opera */
-	-khtml-user-select: auto !important;    /* Konqueror */
-	-moz-user-select: all !important;      /* Firefox */
-	-ms-user-select: all !important;       /* Internet Explorer/Edge */
+	-webkit-user-select: text !important;   /* Chrome/Safari/Opera */
+	-moz-user-select: text !important;      /* Firefox */
+	-ms-user-select: text !important;       /* Internet Explorer/Edge */
+	user-select: text !important;
 }
 
 @font-face {

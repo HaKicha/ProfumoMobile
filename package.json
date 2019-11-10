@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --mode development --open --hot --host 0.0.0.0",
-    "build": "webpack --mode production"
+    "start": "webpack-dev-server --open --hot --config webpack.dev.js --host 0.0.0.0",
+    "build": "webpack --config webpack.prod.js"
   },
   "keywords": [],
   "author": "",
@@ -22,9 +22,11 @@
     "clean-webpack-plugin": "^1.0.1",
     "file-loader": "^3.0.1",
     "html-webpack-plugin": "^3.2.0",
+    "terser-webpack-plugin": "^2.2.1",
     "webpack": "^4.28.1",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.7.2"
+    "webpack-dev-server": "^3.7.2",
+    "webpack-merge": "^4.2.2"
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
@@ -33,11 +35,6 @@
     "@fortawesome/free-regular-svg-icons": "^5.7.2",
     "@fortawesome/free-solid-svg-icons": "^5.7.1",
     "@fortawesome/react-fontawesome": "^0.1.4",
-    "@material/button": "^2.3.0",
-    "@material/checkbox": "^2.3.0",
-    "@material/icon-button": "^2.3.0",
-    "@material/menu": "^3.0.0",
-    "@material/textfield": "^3.0.0",
     "apollo-cache-inmemory": "^1.5.1",
     "apollo-client": "^2.5.1",
     "apollo-link-context": "^1.0.17",
@@ -49,13 +46,13 @@
     "history": "latest",
     "lodash": "^4.17.15",
     "marked": "^0.7.0",
-    "material-components-web": "^2.3.1",
     "mobx": "^5.8.0",
     "mobx-react": "^5.4.3",
     "react": "^16.7.0",
     "react-apollo": "^2.5.2",
     "react-dom": "^16.7.0",
     "react-dynamic-swiper": "^2.0.2",
+    "react-ga": "^2.7.0",
     "react-image-gallery": "^0.8.18",
     "react-markdown": "^4.0.8",
     "react-meta-tags": "^0.7.4",
@@ -64,6 +61,7 @@
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
     "react-select": "^3.0.8",
+    "react-share": "^3.0.1",
     "react-star-ratings": "^2.3.0",
     "react-transition-group": "^4.1.1",
     "style-loader": "^0.23.1",

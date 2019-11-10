@@ -6,6 +6,8 @@ import {Link} from "react-router-dom";
 import {theme} from "../../stores/StyleStore";
 import routes from '../../stores/routes';
 import {resetPassword} from "../../api/Auth";
+import ReactGA from 'react-ga';
+import MetaTags from "react-meta-tags";
 
 export default class ResetPassword extends React.Component {
 
@@ -25,6 +27,10 @@ export default class ResetPassword extends React.Component {
 
         this.passInputHandler = this.passInputHandler.bind(this);
         this.send = this.send.bind(this);
+    }
+
+    componentWillMount() {
+        ReactGA.pageview(location.pathname);
     }
 
     passInputHandler(target){
@@ -65,7 +71,10 @@ render() {
         )
 
     return(
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}><MetaTags>
+            <title>Сброс пароля</title>
+        </MetaTags>
+
             <Container>
                 <Image src={Logo}/>
                 <Info>Введите новый пароль</Info>

@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import Category from "./Category";
 import {getCategoryTree} from "../../api/Categories";
 import PageWrapper from "../public/PageWrapper";
+import ReactGA from 'react-ga';
+import MetaTags from "react-meta-tags";
 
 
 export default class CategoryNavigation extends React.Component {
@@ -15,12 +17,16 @@ export default class CategoryNavigation extends React.Component {
     }
 
     componentWillMount() {
+        ReactGA.pageview(location.pathname);
         getCategoryTree().then(data => {this.setState({categories: data})})
     }
 
     render() {
         return(
             <PageWrapper>
+                <MetaTags>
+                    <title>Категории</title>
+                </MetaTags>
                 <Container>
                     {this.state.categories.map(elem => {return <Category key={elem.key} data={elem}/>})}
                 </Container>

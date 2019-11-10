@@ -34,9 +34,9 @@ export default class SearchInput extends React.Component {
     render() {
         return (
                 <Main>
-                    <AnimatedIcon icon={faSearch} size={'sm'} color={'#767676'} onClick={this.searchClickHandler}/>
+                    <AnimatedIcon icon={faSearch} size={'sm'} color={'#000000'} onClick={this.searchClickHandler}/>
                     <Input type="text" placeholder={'Поиск'} ref={this.inputRef}/>
-                    <AnimatedIcon icon={faTimes} size={'sm'} color={'#767676'} onClick={this.clearClickHandler}/>
+                    <AnimatedIcon icon={faTimes} size={'sm'} color={'#000000'} onClick={this.clearClickHandler}/>
                 </Main>
         )
     }
@@ -63,24 +63,6 @@ const Input = styled.input`
   font-size: 18px;
   border: none;
 `
-const ClearButton = styled(FontAwesomeIcon)`
-  color: #767676;
-  z-index: 2;
-  margin-top: 15px;
 
-  
-  &:active{
-    color: #333;
-  }
-`
-const SearchIcon = styled(FontAwesomeIcon)`
-  color: #767676;
-  z-index: 2;
-  margin-top: 15px;
-  margin-left:70%;
-  &:active{
-    color: #333;
-  }
-`;
 
 

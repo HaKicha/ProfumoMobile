@@ -4,16 +4,22 @@ import Query from 'react-apollo/Query'
 import gql from "graphql-tag";
 import ReactMarkdown from "react-markdown";
 import PageWrapper from "../public/PageWrapper";
+import ReactGA from 'react-ga';
+import MetaTags from "react-meta-tags";
 
 export default class UserAgreement extends React.Component {
 
     componentWillMount() {
+        ReactGA.pageview(location.pathname);
         window.scrollTo(0,0);
     }
 
     render() {
         return(
             <PageWrapper>
+                <MetaTags>
+                    <title>Приватность</title>
+                </MetaTags>
                 <Content>
                     <Query query={gql`
                    query {

@@ -30,36 +30,26 @@ export default class Footer extends React.Component{
                     <Pane>
                         <ButtonContainer to={routes.CATEGORY_NAVIGATION}>
                             <AnimatedIcon
-                                height={'26px'}
-                                width={'26px'}
-                                padding={'9px'}
+                                {...IconParams}
                                 icon={faAlignLeft}
-                                bgcolor={theme.primary_light}
                             />
                         </ButtonContainer>
                         <ButtonContainer to={routes.GLOBAL_SEARCH}>
                             <AnimatedIcon
-                                height={'26px'}
-                                width={'26px'}
-                                padding={'9px'}
-                                bgcolor={theme.primary_light}
+                                {...IconParams}
                                 icon={faSearch}/>
                         </ButtonContainer>
                         <span/>
                         <ButtonContainer to={routes.WHISHLIST}>
                             <AnimatedIcon
-                                height={'26px'}
-                                width={'26px'}
-                                padding={'9px'}
+                                color={this.props.store.whishlist.getAll.length > 0 ? theme.primary:'white'}
+                                {...IconParams}
                                 bgcolor={theme.primary_light}
                                 icon={faHeart}/>
                         </ButtonContainer>
                         <ButtonContainer to={this.props.store.userStore.isLogged?routes.CABINET:routes.SIGN_IN}>
                             <AnimatedIcon
-                                height={'26px'}
-                                width={'26px'}
-                                padding={'9px'}
-                                bgcolor={theme.primary_light}
+                                {...IconParams}
                                 icon={faUserCircle}/>
                         </ButtonContainer>
                     </Pane>
@@ -69,6 +59,13 @@ export default class Footer extends React.Component{
     }
 
 }
+const IconParams = {
+    height: '30px',
+    width: '30px',
+    padding: '9px',
+    bgcolor: theme.primary_light
+}
+
 const GlobalMain = styled.div`
   display: block;
   position: fixed;

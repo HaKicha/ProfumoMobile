@@ -5,6 +5,7 @@ import {theme} from "../../../stores/StyleStore";
 import StarRatings from 'react-star-ratings';
 import {sendFeedback} from "../../../api/Feedback";
 
+
 export default class Order extends React.Component {
 
     constructor(props){
@@ -22,6 +23,19 @@ export default class Order extends React.Component {
         this.setState(oldState => {
             return {opened: !oldState.opened}
         })
+    }
+
+
+    getStatusString = status => {
+        switch (status) {
+            case 'success': return 'Оплачено'
+            case 'error': return 'Ошибка'
+            case 'failure': return 'Ошибка'
+            case 'revoke': return 'Отменен'
+            case 'in_post': return 'На почте'
+            case 'processing': return 'Обрабатывается'
+            case 'ordered': return 'Доставлено'
+        }
     }
 
     setRating = grade =>  {this.setState({rating: grade})}
@@ -57,6 +71,7 @@ render() {
             </Head>
             <AddInfo visible={this.state.opened}>
                 {this.props.order.orders.map(el => <ProductPane order={el} key={el.product.id}/>)}
+                <b>Статус доставки: <Status>{this.getStatusString(this.props.order.status)}</Status></b>
                 <b>Способ оплаты</b>
                 <Payment>{this.props.order.type === 'liqpay'?'Электронный платеж (Liqpay)':'Оплата наличными (Новая почта)'}</Payment>
 
@@ -126,6 +141,11 @@ const Head = styled.div`
 const AddInfo = styled.div`
     display: ${props => props.visible?'grid':'none'};
     padding-bottom: 30px;
+`;
+
+const Status = styled.span`
+    font-weight: normal;
+    font-size: 12pt;
 `;
 
 const Payment = styled.p`
