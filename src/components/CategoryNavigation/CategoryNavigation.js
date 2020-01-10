@@ -5,6 +5,7 @@ import {getCategoryTree} from "../../api/Categories";
 import PageWrapper from "../public/PageWrapper";
 import ReactGA from 'react-ga';
 import MetaTags from "react-meta-tags";
+import InfoFooter from "../public/InfoFooter";
 
 
 export default class CategoryNavigation extends React.Component {
@@ -30,6 +31,7 @@ export default class CategoryNavigation extends React.Component {
                 <Container>
                     {this.state.categories.map(elem => {return <Category key={elem.key} data={elem}/>})}
                 </Container>
+                <InfoFooter/>
             </PageWrapper>
         )
     }

@@ -20,6 +20,7 @@ import {clone} from 'lodash'
 import Recomendations from "../public/Recomendations";
 import ReactGA from 'react-ga';
 import MetaTags from "react-meta-tags";
+import InfoFooter from "../public/InfoFooter";
 
 @inject('store')
 @observer
@@ -104,13 +105,23 @@ export default class Catalog extends React.Component {
 
     toggleSort(){this.setState(oldState => ({sortingOpen: !oldState.sortingOpen}))};
 
-    setSortingOrder(order){this.setState({sortingOrder: order});};
+    setSortingOrder(order){
+        this.setState({
+            sortingOrder: order,
+            page: 0
+        });
+        window.scrollTo(0,0);
+    };
 
-    setPage(page){this.setState({page: page.selected})}
+    setPage(page){
+        console.log(page);
+        this.props.store.filters.setPage(page.selected);
+        window.scrollTo(0,0);
+    }
 
 
     render() {
-        
+
         let key = '';
 
         let filtersJson = clone(this.props.store.filters.Filters);
@@ -130,10 +141,36 @@ export default class Catalog extends React.Component {
                     <title>Каталог товаров</title>
                 </MetaTags>
                 <HeadBlock>
-                    <SearchInput productId={this.props.match.params.id.split('&')[0]}/>
                     <AnimatedButton {...ButtonParams} onClick={this.toggleFiters}>Фильтры</AnimatedButton>
                     <AnimatedButton {...ButtonParams} onClick={this.toggleSort}>Сортировать</AnimatedButton>
                 </HeadBlock>
+                {location.pathname.split('/').pop().includes('&')?
+                    <MetaTags>
+                        <title>Поиск: {decodeURIComponent(location.pathname.split('/').pop().substring(1))}</title>
+                    </MetaTags>:
+                    <Query
+                        query={gql`
+                    query($id: ID!){
+                      category(id: $id){
+                        name_ru
+                        meta_title
+                        meta_keywords
+                        meta_decription
+                      }
+                    }`}
+                        variables={{'id': location.pathname.split('/').pop()}}
+                    >
+                        {({loading,error,data}) => {
+                            if (loading) return ''
+                            return <MetaTags>
+                                <title>{data.category.name_ru}</title>
+                                <meta name='title' content={data.category.meta_title}/>
+                                <meta name='keywords' content={data.category.meta_keywords}/>
+                                <meta name='decription' content={data.category.meta_decription}/>
+                            </MetaTags>
+                        }
+                        }
+                    </Query>}
                 {this.state.isLoading?<Preloader/>:<Query
                     key={key}
                     query={gql`
@@ -147,7 +184,7 @@ export default class Catalog extends React.Component {
                         filters: filtersJson,
                         sortingOrder: this.state.sortingOrder,
                         limit: this.defaultPageSize,
-                        start: this.defaultPageSize * this.state.page
+                        start: this.defaultPageSize * this.props.store.filters.page
                     }}
                 >
                     {({loading, error, data}) => {
@@ -173,6 +210,7 @@ export default class Catalog extends React.Component {
                         previousLabel={'Назад'}
                         nextLabel={'Далее'}
                         breakLabel={'...'}
+                        forcePage={this.props.store.filters.page}
                         breakClassName={'break-me'}
                         pageCount={this.state.pageCount}
                         marginPagesDisplayed={1}
@@ -184,6 +222,7 @@ export default class Catalog extends React.Component {
                     />}
                 </PaginationContainer>
                 {this.state.isLoading?null:<Recomendations/>}
+                <InfoFooter/>
             </PageWrapper>
         )
     }
@@ -191,13 +230,13 @@ export default class Catalog extends React.Component {
 }
 
 const ButtonParams = {
-    color: '#424242',
+    color: '#181818',
     height: '50px',
     width: '50%',
     borderRadius: '0',
     background: 'rgba(0,0,0,0)',
     fontSize: '14pt',
-    otherStyles: 'display: inline-block; text-shadow: 1px 1px 2px #767676; font-weight: bold;'
+    otherStyles: 'display: inline-block; font-weight: bold;'
 }
 
 
@@ -205,8 +244,8 @@ const ButtonParams = {
 const Content = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  width: calc(100vw - 30px);
-  padding: 10px 15px 80px 15px;
+  width: calc(100vw - 50px);
+  padding: 10px 25px 80px 25px;
   margin-top: 100px;
   overflow-x: hidden;
   grid-auto-rows: 269px;
@@ -252,6 +291,9 @@ const PaginationContainer = styled.div`
         li.active{
             background: ${theme.primary};
             color: white;
+        }
+        .break-me{
+            pointer-events: none;
         }
     }
     

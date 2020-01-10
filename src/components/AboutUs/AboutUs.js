@@ -10,6 +10,7 @@ import MetaTags from 'react-meta-tags';
 import Preloader from "../public/Preloader";
 import PageWrapper from "../public/PageWrapper";
 import ReactGA from 'react-ga';
+import InfoFooter from "../public/InfoFooter";
 
 export default class AboutUs  extends React.Component{
 
@@ -20,11 +21,10 @@ export default class AboutUs  extends React.Component{
 
     render(){
         return (
-            <React.Fragment>
+            <PageWrapper>
                 <MetaTags>
                     <title>О нас</title>
                 </MetaTags>
-                <Header/>
                 <MainAbout>
                     <Title>
                         <h2> О НАС </h2>
@@ -36,6 +36,9 @@ export default class AboutUs  extends React.Component{
                                 first_block
                                 second_block
                                 third_block
+                                meta_title
+                                meta_keywords
+                                meta_decription
                               }
                             }
                         `}
@@ -46,6 +49,11 @@ export default class AboutUs  extends React.Component{
 
                             return (
                                 <PageWrapper>
+                                    <MetaTags>
+                                        <meta name='title' content={data.aboutuses[0].meta_title}/>
+                                        <meta name='keywords' content={data.aboutuses[0].meta_keywords}/>
+                                        <meta name='decription' content={data.aboutuses[0].meta_decription}/>
+                                    </MetaTags>
                                     <Articles>
                                         <div>
                                             <ReactMarkdown source={data.aboutuses[0].first_block||''}/>
@@ -57,13 +65,13 @@ export default class AboutUs  extends React.Component{
                                             <ReactMarkdown source={data.aboutuses[0].third_block||''}/>
                                         </div>
                                     </Articles>
+                                    <InfoFooter/>
                                 </PageWrapper>
                             )
                         }}
                     </Query>
                 </MainAbout>
-                <Footer/>
-            </React.Fragment>
+            </PageWrapper>
         );
     }
 }

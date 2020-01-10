@@ -1,5 +1,6 @@
 import {action, observable, computed, toJS} from "mobx";
 import {ModifyCart} from "../api/Cart";
+import {uniqBy} from 'lodash';
 
 export default class CartStore {
 
@@ -30,6 +31,7 @@ export default class CartStore {
             _id: id,
             count: count
         })
+        this.cart = uniqBy(toJS(this.cart), el => el._id);
         ModifyCart(toJS(this.cart))
     }
 

@@ -15,6 +15,7 @@ import {AnimatedIcon} from "../../stores/AnimatedObjectStore";
 import {compact} from 'lodash';
 import ReactGA from 'react-ga';
 import MetaTags from "react-meta-tags";
+import InfoFooter from "../public/InfoFooter";
 
 @inject('store')
 @observer
@@ -35,6 +36,7 @@ export default class Whishlist extends React.Component {
                 <title>Избранное</title>
             </MetaTags>
             <Title>Пусто :(</Title>
+            <InfoFooter/>
         </PageWrapper>
     )
 
@@ -74,7 +76,6 @@ export default class Whishlist extends React.Component {
                                 <ProductCard>
                                     <Image src={UrlStore.MAIN_URL + images[0]}/>
                                     <InfoBlock>
-                                        <Categories ProductID={id}/>
                                         <Name
                                             to={'/product/' + id}
                                         >{data.product.name_ru}</Name>
@@ -118,6 +119,7 @@ export default class Whishlist extends React.Component {
 
                 })}
             </Container>
+            <InfoFooter/>
         </PageWrapper>
         </ThemeProvider>
     )
@@ -140,6 +142,7 @@ const ProductCard = styled.div`
     display: grid;
     grid-template-columns: 2fr 5fr 30px;
     padding: 10px;
+    width: calc(100vw - 40px);
 `;
 
 const Image = styled.img`
@@ -152,13 +155,14 @@ const Image = styled.img`
 const InfoBlock = styled.div`
     display: grid;
     padding: 0 20px;
+    grid-gap: 3px 0;
 `;
 
 const Name = styled(Link)`
     font-size: 9pt;
-    color: ${props => props.theme.primary};
+    color: ${props => props.theme.bgCol};
     padding-top: 5px;
-    
+    text-decoration: none;
     &:hover {
       color: ${props => props.theme.primary_light};
       text-decoration: underline;

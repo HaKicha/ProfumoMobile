@@ -43,7 +43,7 @@ export default class Recomendations extends React.Component {
 
         return(
             <Container>
-                <Title>Часто ищут</Title>
+                <Title>ЧАСТО ИЩУТ</Title>
                 <Swiper
                     navigation={true}
                     pagination={false}
@@ -70,11 +70,13 @@ export default class Recomendations extends React.Component {
                                         if (error) {
                                             return '';
                                         }
-                                        return <Block to={'/product/' + elem}>
-                                            <Image src={UrlStore.MAIN_URL + data.product.photos[0].url}/>
-                                            <Name to={'/product/' + elem}>{data.product.name_ru}</Name>
-                                            <Price>{data.product.price}</Price>
-                                        </Block>
+                                        return <Container>
+                                            <Block to={'/product/' + elem}>
+                                                <Image src={UrlStore.MAIN_URL + data.product.photos[0].url}/>
+                                                <Name to={'/product/' + elem}>{data.product.name_ru}</Name>
+                                                <Price>{data.product.price}</Price>
+                                            </Block>
+                                        </Container>
                                     }}
                                 </Query>)}
                         </Group>
@@ -87,20 +89,21 @@ export default class Recomendations extends React.Component {
 }
 
 const Container = styled.div`
-    .swiper-button-next {
-        
+    height: max-content;
+    .swiper-button-next,
+    .swiper-button-prev {
+        filter: brightness(0);
     }
     
 `;
 
 const Title = styled.h2`
     text-align: center;
-    
+    margin: 5px 0;
 `;
 
 const Block = styled(Link)`
     display: grid;
-    grid-template-rows: 45vw repeat(2, max-content);
     width: 100%;
     justify-items: center;
     text-decoration: none;
@@ -114,10 +117,10 @@ const Block = styled(Link)`
 
 const Image = styled.img`
     object-fit: contain;
-    max-height: 90%;
+    max-height: 70%;
     justify-self: center;
-    max-width: 90%;
-    padding: 5%;
+    max-width: 70%;
+    padding: 15%;
 `;
 
 const Name = styled.p`
@@ -138,14 +141,15 @@ const Name = styled.p`
 const Price = styled.span`
     display: block;
     padding: 3px;
-    background: ${theme.primary_light};
+    background: transparent;
     font-size: 14pt;
-    color: #fff;
+    color: #000000;
     width: max-content;
     border-radius: 5px;
     margin-top: 3px;
     text-decoration: none;
     align-self: center;
+    font-weight: bold;
     &:after {
         content: " грн.";
     }
@@ -154,6 +158,7 @@ const Price = styled.span`
 const Group = styled(Slide)`
     display: grid !important;
     justify-content: center !important;
-    grid-template-columns: repeat(2,45%) !important;
+    grid-template-columns: repeat(2,40%) !important;
+    grid-gap: 5%;
     
 `;

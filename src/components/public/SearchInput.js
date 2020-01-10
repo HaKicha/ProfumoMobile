@@ -22,8 +22,15 @@ export default class SearchInput extends React.Component {
             if (this.props.productId !== '') Url += this.props.productId;
             Url += '&';
             Url += this.inputRef.current.value;
+            this.props.close();
             history.push(Url);
         }
+    }
+
+    componentWillMount(){
+        document.addEventListener('keyup', (e) => {
+            if (this.props.open && e.key === 'Enter') this.searchClickHandler();
+        })
     }
 
     clearClickHandler(){
@@ -31,38 +38,69 @@ export default class SearchInput extends React.Component {
         this.inputRef.current.focus()
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.open) {
+            this.inputRef.current.value = '';
+            this.inputRef.current.focus();
+        }
+    }
+
     render() {
         return (
-                <Main>
-                    <AnimatedIcon icon={faSearch} size={'sm'} color={'#000000'} onClick={this.searchClickHandler}/>
-                    <Input type="text" placeholder={'Поиск'} ref={this.inputRef}/>
-                    <AnimatedIcon icon={faTimes} size={'sm'} color={'#000000'} onClick={this.clearClickHandler}/>
-                </Main>
+                <Container open={this.props.open}>
+                    <Background  onClick={this.props.close}/>
+                    <Main>
+                        <Input type="text" placeholder={'Поиск'} ref={this.inputRef} onClick={e =>{ e.stopPropagation()}}/>
+                        <AnimatedIcon icon={faSearch} size={'sm'} color={'#6f6f6f'} onClick={this.searchClickHandler}/>
+                    </Main>
+                </Container>
         )
     }
 }
 
 const Main = styled.div`
-    width: 90%;
+    width: 80%;
     display: grid;
-    grid-template-columns: 15% 1fr 15%;
-    height: 50px;
-    -webkit-box-shadow: 0 0 2px 2px #aaa;
-    -moz-box-shadow: 0 0 2px 2px #aaa;
-    box-shadow: 0 0 2px 2px #aaa;
-    border: 1px #767676;
+    grid-template-columns: 1fr 10%;
     padding: 0 5%;
+    -webkit-box-shadow: 0 0 2px 0 #575757;
+    -moz-box-shadow: 0 0 2px 0 #575757;
+    box-shadow: 0 0 2px 0 #575757;
+    border: 1px #575757;
+    border-radius: 5px;
+    background: #fff;
+    height: 50px;
+    position: fixed;
+    top: 70px;
+    left: 5%;
+    right: 5%;
+    z-index: 101;
  `
 const Input = styled.input`
-  justify-self: center;
-  align-self: center;
-  width: 100%;
-  height: 40px;
-  outline: none;
-  z-index: 1;
-  font-size: 18px;
-  border: none;
+    justify-self: center;
+    align-self: center;
+    width: 100%;
+    height: 40px;
+    outline: none;
+    z-index: 1;
+    font-size: 18px;
+    border: none;
+    
 `
 
+const Container = styled.div`
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    display: ${props => props.open?'block':'none'};
+    z-index: 100;
+`;
 
-
+const Background = styled.div`
+    background: #777;
+    opacity: 0.5;
+    height: 100vh;
+    width: 100vw;
+    z-index: 100;
+    opacity: 0.5;
+`;

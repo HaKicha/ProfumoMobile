@@ -10,6 +10,7 @@ import ReactPaginate from 'react-paginate';
 import MetaTags from "react-meta-tags";
 import PageWrapper from "../public/PageWrapper";
 import ReactGA from 'react-ga';
+import InfoFooter from "../public/InfoFooter";
 
 export default class Catalog extends React.Component {
 
@@ -40,7 +41,6 @@ export default class Catalog extends React.Component {
                     <MetaTags>
                         <title>Наш блог</title>
                     </MetaTags>
-                    <Header/>
                     <Content>
                         <Query query={
                             gql`query ($limit: Int!, $startFrom: Int!, $sortOption: String!){
@@ -105,7 +105,7 @@ export default class Catalog extends React.Component {
                                 )
                             }}
                         </Query>
-                    <Footer/>
+                    <InfoFooter/>
                 </PageWrapper>
             </ThemeProvider>
         )
@@ -116,10 +116,9 @@ const Content = styled.div`
     display: grid;
     max-width: 100%;
     grid-gap: 20px;
-    min-height: calc(100vh - 360px);
+    min-height: 100vh;
     justify-content: center;
-    grid-auto-rows: auto;
-    padding: 0 20px;
+    padding: 0 20px 50px 20px;
 `;
 
 

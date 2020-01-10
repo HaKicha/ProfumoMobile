@@ -7,7 +7,6 @@ const merge = require('webpack-merge');
 module.exports = merge(common,{
     mode: "production",
     plugins: [
-        new CleanWebpackPlugin(['mobile']),
         new HtmlWebpackPlugin({
             template: './src/index.html'
         })

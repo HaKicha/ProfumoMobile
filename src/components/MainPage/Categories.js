@@ -61,7 +61,7 @@ export default class Categories extends React.Component {
                                         if (data.category.category_photo === null) return ''
                                         return (
                                             <Category to={'/catalog/' + id}>
-                                                <Image src={UrlStore.MAIN_URL + data.category.category_photo.url}/>
+                                                <Image src={UrlStore.MAIN_URL + data.category.category_photo.url} loading={'lazy'}/>
                                                 <LinkToCategory to={'/catalog/' + id}>{data.category.name_ru}</LinkToCategory>
                                             </Category>
                                         );
@@ -79,7 +79,8 @@ const Container = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 5px 20px;
-    width: 100%;
+    padding: 20px;
+    width: calc(100% - 40px);
     span{
         height: 1px;
         width: 250px;

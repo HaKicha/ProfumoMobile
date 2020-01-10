@@ -4,6 +4,7 @@ import SearchInput from "../public/SearchInput";
 import Recomendations from "../public/Recomendations";
 import ReactGA from 'react-ga';
 import MetaTags from "react-meta-tags";
+import InfoFooter from "../public/InfoFooter";
 
 export default class Search extends React.Component {
 
@@ -19,6 +20,7 @@ export default class Search extends React.Component {
             </MetaTags>
             <SearchInput productId={''}/>
             <Recomendations/>
+            <InfoFooter/>
         </PageWrapper>
     )
     }

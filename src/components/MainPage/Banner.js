@@ -23,7 +23,7 @@ export default class Banner extends React.Component {
                     if (loading) return <p/>
                     if (error) return <p>Error :)</p>
                     return <a href={data.banners[0].link}>
-                        <BannerImg src={UrlStore.MAIN_URL + data.banners[0].banner.url}/>
+                        <BannerImg src={UrlStore.MAIN_URL + data.banners[0].banner.url}  loading={'lazy'}/>
                     </a>
                 }}
             </Query>
@@ -33,6 +33,6 @@ export default class Banner extends React.Component {
 
 const BannerImg = styled.img`
     width: 90%;
-    margin: 50px 5%;
+    margin: 50px 5% 10px 5%;
     
 `;

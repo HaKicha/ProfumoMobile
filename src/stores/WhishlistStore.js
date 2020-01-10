@@ -11,7 +11,8 @@ export default class WhishlistStore {
 
     @action
     add(...id){
-        this.whishlist.push(...id);
+        let data = id.filter(el => el.length === 24)
+        this.whishlist.push(...data);
         this.whishlist = uniq(toJS(this.whishlist));
         UpdateWhishlist(toJS(this.whishlist));
     }

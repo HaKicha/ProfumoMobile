@@ -22,7 +22,7 @@ export default class FilterDropdown extends React.Component {
     }
 
     toggleFilter(id,e) {
-        this.props.store.filters.setProperty(id,e.target.checked);
+        this.props.store.filters.setProperty(id,e.target.checked);z
     }
 
 render() {

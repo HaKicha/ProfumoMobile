@@ -9,14 +9,16 @@ export default class CatalogCard extends React.Component {
 render() {
     return(
         <ThemeProvider theme={theme}>
-            <Container to={`/blog/${this.props.Data.id}`}>
-                <Image src={UrlStore.MAIN_URL + this.props.Data.header_photo.url || ''} alt=""/>
-                <Name  to={`/blog/${this.props.Data.id}`}>
-                    {this.props.Data.title}
-                </Name>
-                <Desc></Desc>
-                <DateMark>{new Date(this.props.Data.publishing).toLocaleDateString()}</DateMark>
-            </Container>
+           <div>
+               <Container to={`/blog/${this.props.Data.id}`}>
+                   <Image src={UrlStore.MAIN_URL + this.props.Data.header_photo.url || ''} alt=""/>
+                   <Name  to={`/blog/${this.props.Data.id}`}>
+                       {this.props.Data.title}
+                   </Name>
+                   <Desc></Desc>
+                   <DateMark>{new Date(this.props.Data.publishing).toLocaleDateString()}</DateMark>
+               </Container>
+           </div>
         </ThemeProvider>
     )
     }
@@ -24,14 +26,15 @@ render() {
 
 const Container = styled(Link)`
     display: grid;
-    grid-template-rows: 250px repeat(3, max-content);
     grid-gap: 5px;
     text-decoration: none;
+    max-width: 100%;
 `;
 
 const Image = styled.img`
     object-fit: contain;
     display: block;
+    max-height: 100%;
     max-width: 100%;
     padding: 0;
     margin: auto;  

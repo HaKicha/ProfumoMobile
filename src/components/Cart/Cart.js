@@ -12,6 +12,7 @@ import {history} from "../App";
 import routes from '../../stores/routes';
 import ReactGA from 'react-ga';
 import MetaTags from "react-meta-tags";
+import InfoFooter from "../public/InfoFooter";
 
 @inject('store')
 @observer
@@ -84,7 +85,7 @@ export default class Cart extends React.Component {
 
 const Container = styled.div`
     display: block;
-    padding: 20px 20px 100px 20px;
+    padding: 20px 20px 50px 20px;
     
 `;
 
@@ -101,9 +102,9 @@ const BottomPane = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     width: calc(100% - 40px);
-    height: 80px;
+    height: 40px;
     position: fixed;
-    bottom: 50px;
+    bottom: 10px;
     left: 0;
     right: 0;  
     background: transparent;

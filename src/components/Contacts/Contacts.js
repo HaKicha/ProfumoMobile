@@ -12,6 +12,7 @@ import telegram from "../../resources/image/SocialIcons/telegram.png";
 import PageWrapper from "../public/PageWrapper";
 import Preloader from "../public/Preloader";
 import ReactGA from 'react-ga';
+import InfoFooter from "../public/InfoFooter";
 
 export default class Contacts extends React.Component {
 
@@ -76,20 +77,29 @@ export default class Contacts extends React.Component {
                                     telegram
                                     whats_app
                                     viber
+                                    meta_title
+                                    meta_keywords
+                                    meta_decription
                                   }
                                 }`}>
                     {({loading,error,data}) => {
                         if (loading) return <p/>
                         if (error) return <p></p>
-                        return (
-                            <MarkdownContainer id={'container'}>
-                                <div dangerouslySetInnerHTML={{__html: marked(data.contacts[0].contacts_block).replace('!social_links', `<div
-                                    class="links-container">
-                                    <a href="${data.contacts[0].viber}"><img src="src/resources/image/SocialIcons/viber.png"/></a>
-                                    <a href="${data.contacts[0].whats_app}"><img src="src//resources/image/SocialIcons/whatsap.png"/></a>
-                                    <a href="${data.contacts[0].telegram}"><img src="src/resources/image/SocialIcons/telegram.png"/></a>
-                                </div>`)}}/>
-                            </MarkdownContainer>)
+                        return (<>
+                            <MetaTags>
+                                <meta name='title' content={data.contacts[0].meta_title}/>
+                                <meta name='keywords' content={data.contacts[0].meta_keywords}/>
+                                <meta name='decription' content={data.contacts[0].meta_decription}/>
+                            </MetaTags>
+                                    <MarkdownContainer id={'container'}>
+                                        <div dangerouslySetInnerHTML={{__html: marked(data.contacts[0].contacts_block).replace('!social_links', `<div
+                                            class="links-container">
+                                            <a href="${data.contacts[0].viber}"><img src="src/resources/image/SocialIcons/viber.png"/></a>
+                                            <a href="${data.contacts[0].whats_app}"><img src="src//resources/image/SocialIcons/whatsap.png"/></a>
+                                            <a href="${data.contacts[0].telegram}"><img src="src/resources/image/SocialIcons/telegram.png"/></a>
+                                        </div>`)}}/>
+                                    </MarkdownContainer>
+                                </>)
                     }}
                 </Query>
                 <Form onSubmit={() => {}}>
@@ -146,6 +156,7 @@ export default class Contacts extends React.Component {
                 </Form>
 
             </Container>
+            <InfoFooter/>
         </PageWrapper>
         </ThemeProvider>
     )

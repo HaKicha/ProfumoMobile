@@ -71,9 +71,11 @@ render() {
         )
 
     return(
-        <ThemeProvider theme={theme}><MetaTags>
-            <title>Сброс пароля</title>
-        </MetaTags>
+        <ThemeProvider theme={theme}>
+            <>
+            <MetaTags>
+                <title>Сброс пароля</title>
+            </MetaTags>
 
             <Container>
                 <Image src={Logo}/>
@@ -109,6 +111,7 @@ render() {
                 <StyledLink to={routes.SIGN_IN}>Войти</StyledLink>
                 <StyledLink to={routes.SIGN_UP}>Зарегистрироватся</StyledLink>
             </Container>
+            </>
         </ThemeProvider>
     )
     }

@@ -41,6 +41,7 @@ render() {
                             }
                           }
                         }`}
+            fetchPolicy={'no-cache'}
             variables={{id: this.props.productId}}
         >
             {({loading,error,data}) => {
@@ -68,7 +69,7 @@ render() {
 
                 return(
                     <Container>
-                        <Image src={UrlStore.MAIN_URL + data.product.photos[0].url}/>
+                        <Image src={UrlStore.MAIN_URL + data.product.photos[0].url} loading={'lazy'}/>
                         <Info>
                             <NameContainer>
                                 <p>{data.product.name_ru}</p>
@@ -92,7 +93,7 @@ render() {
 
 const Container = styled.div`
     display: grid;
-    grid-template-columns: 1fr 3fr;
+    grid-template-columns: 2fr 5fr;
     width: 100%;
     margin-bottom: 5px;
     border-bottom: 1px solid #ccc;
@@ -146,7 +147,7 @@ const CounterWrapper = styled.div`
 
 const Image = styled.img`
     display: block;
-    max-width: 100%;
+    width: 100%;
     max-height: 100%;
     object-fit: contain;  
     margin: auto;

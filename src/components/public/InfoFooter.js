@@ -4,8 +4,8 @@ import {theme} from "../../stores/StyleStore";
 import Query from "react-apollo/Query";
 import gql from 'graphql-tag';
 import Logo from "../../resources/image/Logo.svg";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faTelegram, faViber, faWhatsapp} from "@fortawesome/free-brands-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome/index";
+import {faTelegram, faViber, faWhatsapp} from "@fortawesome/free-brands-svg-icons/index";
 
 export default function InfoFooter(props) {
     
@@ -67,7 +67,7 @@ const Container = styled.div`
     justify-items: center;
     grid-gap: 10px;
     text-align: center;
-    padding-bottom: 150px;
+    padding-bottom: 20px;
     margin-bottom: -100px;
     color: white;
 `;

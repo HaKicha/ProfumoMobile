@@ -1,6 +1,6 @@
 import styled, {keyframes} from "styled-components";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-
+import React from 'react';
 export {
     AnimatedIcon,
     AnimatedCheckBlock,
@@ -8,19 +8,23 @@ export {
     AnimatedRadioButton
 }
 
-const AnimatedIcon = styled(FontAwesomeIcon)`
-    color: ${props => props.color || 'white'};
-    align-self: center;
-    justify-self: center;
-    width: 100% !important;
-    height: 100% !important;
-    max-height: ${props => props.height||'30px'} !important;
-    max-width: ${props => props.width||'30px'} !important;
-    padding: ${props => props.padding||'7px'};;
-    transition: all ${props => props.duration || '.5s'};
+function AnimatedIcon(props){
+    return(
+        <IconContainer {...props}>
+            <Icon icon={props.icon} size={props.size} {...props}  onClick={null}/>
+        </IconContainer>
+    )
+}
+
+const IconContainer = styled.div`
+    height: ${props => props.height||'30px'} !important;
+    width: ${props => props.width||'30px'} !important;
+    padding: ${props => props.padding||'7px'};
     border-radius: 50%;
     background-position: center;
-
+    transition: all ${props => props.duration || '.5s'};
+    align-self: center;
+    justify-self: center;
     &:active {
         color: ${props => props.clickedColor || 'white'};
         background-color:  ${props => props.bgcolor||'rgba(10,10,10,0.5)'};
@@ -28,6 +32,14 @@ const AnimatedIcon = styled(FontAwesomeIcon)`
         transition: background 0s;
     }
     ${props => props.otherstyle}
+`;
+
+const Icon = styled(FontAwesomeIcon)`
+    color: ${props => props.color || 'white'};
+    align-self: center;
+    justify-self: center;
+    height: 100% !important;
+    width: 100% !important;
 `;
 
 const AnimatedButton = styled.button`

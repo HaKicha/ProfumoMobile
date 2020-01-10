@@ -51,7 +51,6 @@ import CheckoutLiqPayRedirect from "./Checkout/CheckoutLiqPayRedirect";
 import CheckoutCompleteLiqPay from "./Checkout/CheckoutCompleteLiqPay";
 import ReactGA from 'react-ga';
 
-
 const httpLink = createHttpLink({
     uri: UrlStore.MAIN_GRAPHQL_URI
 });
@@ -79,14 +78,17 @@ class App extends Component {
 
     componentWillMount() {
         ReactGA.initialize('UA-128259482-2');
-
         me().then(data => {
             if (data) {
                 userStore.setUser(data);
                 whishlist.add(...data.wishlist)
             }
+            GetCart().then(data => {
+                console.log(data.body);
+                cartStore.addMany(data.body)
+            })
         })
-        GetCart().then(data => cartStore.addMany(data.body))
+
     }
 
     render() {

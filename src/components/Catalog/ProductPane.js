@@ -9,6 +9,7 @@ import {UrlStore} from '../../stores/UrlStore'
 import {AnimatedIcon} from "../../stores/AnimatedObjectStore";
 import {inject} from "mobx-react";
 import {history} from "../App";
+import perfumesIcon from '../../resources/image/perfumesImage.png';
 
 @inject('store')
 export default class ProductPane extends React.Component {
@@ -88,17 +89,20 @@ export default class ProductPane extends React.Component {
                             `;
 
                         return(
-                                <Container 
+                                <Container
                                     onFocus={this.focusHandler}
                                     onBlur={this.blurHandler}
                                     tabIndex={0}
                                     ref={this.block}
                                     animation={BlockHover}
                                 >
-                                        <Image src={UrlStore.MAIN_URL + data.product.photos[0].url} loading={'lazy'} onClick={() => {
+                                        {data.product.photos.length > 0 ? <Image src={UrlStore.MAIN_URL + data.product.photos[0].url} loading={'lazy'} onClick={() => {
                                             if (this.state.focused) history.push('/product/' + this.props.productId);
                                             else this.block.current.focus()
-                                        }}/>
+                                        }}/> : <Image src={perfumesIcon} loading={'lazy'} onClick={() => {
+                                            if (this.state.focused) history.push('/product/' + this.props.productId);
+                                            else this.block.current.focus()
+                                        }}/>}
                                     <Name  onClick={() => {
                                         if (this.state.focused) history.push('/product/' + this.props.productId);
                                         else this.block.current.focus()
@@ -115,10 +119,14 @@ export default class ProductPane extends React.Component {
                                         />:<span/>}
                                         {rating > 0?<span>Отзывов: {data.product.comments_len}</span>:<span/>}
                                     </Rating>
-                                    {this.state.focused && <IconsBlock>
-                                        <AnimatedIcon icon={faCartPlus} color={theme.primary} onClick={() => {this.props.store.cart.add(this.props.productId)}}/>
-                                        <AnimatedIcon icon={faHeart} color={theme.primary}  onClick={() => {this.props.store.whishlist.add(this.props.productId, 1)}}/>
-                                    </IconsBlock>}
+                                    {this.state.focused && <>
+                                        {!(!data.product.avaliable || data.product.amount === 0) ?  <IconsBlock>
+                                            <IconContainer onClick={() => {this.props.store.cart.add(this.props.productId, 1)}}>
+                                                <img style={{height: '32px', width: '30px'}} src={`data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' height=\'32\' width=\'30\'%3E%3Cpath d='m 24.710582,25.523633 c -1.487902,0 -2.691776,1.260021 -2.691776,2.8 0,1.539979 1.203874,2.8 2.691776,2.8 1.48798,0 2.705312,-1.260021 2.705312,-2.8 0,-1.539979 -1.217332,-2.8 -2.705312,-2.8 z m -13.526561,0 c -1.4878859,0 -2.6917439,1.260021 -2.6917439,2.8 0,1.539979 1.203858,2.8 2.6917439,2.8 1.487981,0 2.705312,-1.260021 2.705312,-2.8 0,-1.539979 -1.217331,-2.8 -2.705312,-2.8 z m 0,-4.199959 1.487981,-2.8 h 10.077296 c 1.014444,0 1.907217,-0.574011 2.367139,-1.442071 L 31.068124,5.9236334 H 8.7628083 l -1.2715007,-2.8 H 3.0681243 v 2.8 H 5.7734365 L 10.642959,16.549623 6.6120793,24.123674 H 27.415894 v -2.8 z' fill=\'%23e36f64\'/%3E%3C/svg%3E`} alt=""/>
+                                            </IconContainer>
+                                            <AnimatedIcon icon={faHeart} color={theme.primary}  onClick={() => {this.props.store.whishlist.add(this.props.productId)}}/>
+                                        </IconsBlock>: <h2 style={{fontSize: '90%'}}>Нет в наличии</h2>}
+                                    </>}
                                 </Container>
                         );
                     }}
@@ -129,10 +137,8 @@ export default class ProductPane extends React.Component {
     }
 }
 
-
-
 const Container = styled.div`
-    width: calc(50vw - 25px);
+    width: 100%;
     display: grid;
     border: none;
     justify-items: center;
@@ -175,9 +181,8 @@ const Name = styled.span`
 const Price = styled.span`
     display: block;
     padding: 3px;
-    background: ${props => props.theme.primary_light};
     font-size: 14pt;
-    color: #fff;
+    color: #000000;
     width: max-content;
     border-radius: 5px;
     margin-top: 3px;
@@ -214,4 +219,29 @@ const IconsBlock = styled.div`
     grid-template-columns: repeat(2, max-content);
     grid-gap: 30px;  
     padding: 10px 0;
+`;
+
+const IconContainer = styled.div`
+    height: ${props => props.height||'30px'};
+    width: ${props => props.width||'30px'};
+    padding: ${props => props.padding||'7px'};
+    border-radius: 50%;
+    background-position: center;
+    transition: all ${props => props.duration || '.5s'};
+    align-self: center;
+    justify-self: center;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    &:active {
+        color: ${props => props.clickedColor || 'white'};
+        background-color:  ${props => props.bgcolor||'rgba(10,10,10,0.5)'};
+        background-size: 150%;
+        transition: background 0s;
+    }
+    ${props => props.otherstyle}
+    img {
+        height: 18px;
+        width: 18px;
+    }
 `;

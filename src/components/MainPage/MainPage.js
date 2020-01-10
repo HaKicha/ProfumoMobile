@@ -7,7 +7,7 @@ import Banner from "./Banner";
 import BlogRefs from "./BlogRefs";
 import ReactGA from 'react-ga';
 import MetaTags from 'react-meta-tags';
-import InfoFooter from "./InfoFooter";
+import InfoFooter from "../public/InfoFooter";
 
 export default class MainPage extends React.Component {
 

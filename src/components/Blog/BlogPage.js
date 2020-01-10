@@ -8,6 +8,7 @@ import {UrlStore} from "../../stores/UrlStore";
 import MetaTags from 'react-meta-tags';
 import PageWrapper from "../public/PageWrapper";
 import ReactGA from 'react-ga';
+import InfoFooter from "../public/InfoFooter";
 
 export default class BlogPage extends React.Component {
 
@@ -28,6 +29,9 @@ render() {
                             newsBody
                             link
                             short_desc
+                            meta_title
+                            meta_keywords
+                            meta_decription
                             header_photo {
                                   url
                                 }
@@ -44,6 +48,9 @@ render() {
                         <React.Fragment>
                             <MetaTags>
                                 <title>{data.blog.title}</title>
+                                <meta name='title' content={data.blog.meta_title}/>
+                                <meta name='keywords' content={data.blog.meta_keywords}/>
+                                <meta name='decription' content={data.blog.meta_decription}/>
                             </MetaTags>
                             <Content>
                                 <h1>{data.blog.title}</h1>
@@ -57,7 +64,7 @@ render() {
                 }}
             </Query>
             <RecomendedBlock CurrentId={this.props.match.params.id}/>
-
+            <InfoFooter/>
         </PageWrapper>
     )
     }
@@ -89,6 +96,7 @@ const Content = styled.div`
         text-align: justify;
         letter-spacing: 0px;
         line-height: 140%;
+        text-align: left;
     }
     
     em{

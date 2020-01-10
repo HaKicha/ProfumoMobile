@@ -11,7 +11,7 @@ export default class BlogCard extends React.Component {
         return(
             <ThemeProvider theme={theme}>
                 <Container to={`/blog/${this.props.Data.id}`}>
-                    <Image src={UrlStore.MAIN_URL + this.props.Data.header_photo.url} alt=""/>
+                    <Image src={UrlStore.MAIN_URL + this.props.Data.header_photo.url} alt="" loading={'lazy'}/>
                     <Desc>
                         <Name>
                             {this.props.Data.title}

@@ -17,6 +17,8 @@ import {inject, observer} from "mobx-react";
 import ReactGA from 'react-ga';
 import MetaTags from "react-meta-tags";
 import Shares from "./Shares";
+import perfumesIcon from '../../resources/image/perfumesImage.png';
+import InfoFooter from "../public/InfoFooter";
 
 @inject('store')
 @observer
@@ -48,6 +50,7 @@ export default class Product extends React.Component{
                     <React.Fragment>
                     <Query
                         query={PRODUCT_QUERY}
+                        fetchPolicy={'no-cache'}
                         variables={{"id": this.props.match.params.id}}
                         options={{fetchPolicy: "no-cache"}}
                     >
@@ -59,6 +62,9 @@ export default class Product extends React.Component{
                             }
                             this.refetch = refetch;
                             let images = data.product.photos.map(elem => ({original: UrlStore.MAIN_URL + elem.url}));
+                            if (images.length === 0) images.push({
+                                original: perfumesIcon
+                            })
                             let comments = data.product.comments.length > 0?
                                 <p>комментариев: {data.product.comments.length}</p>:<p>комментариев пока нет</p>
                             let rating = 0;
@@ -100,12 +106,12 @@ export default class Product extends React.Component{
                                             onClick={() => {
                                                 this.setState(oldState => {
                                                     if (!oldState.isFavorite)
-                                                        this.props.store.whishlist.add(this.props.match.params.id)
+                                                    this.props.store.whishlist.add(this.props.match.params.id)
                                                     else this.props.store.whishlist.remove(this.props.match.params.id)
                                                     return {isFavorite: !oldState.isFavorite}})
                                             }}
                                         />
-                                        <AnimatedButton
+                                        {(!data.product.avaliable || data.product.amount === 0) ? <h2>Нет в наличии</h2> : <AnimatedButton
                                             height={'50px'}
                                             width={'160px'}
                                             bgcolor={theme.primary_light}
@@ -114,7 +120,7 @@ export default class Product extends React.Component{
                                             onClick={() => this.props.store.cart.add(this.props.match.params.id, 1)}
                                         >
                                             Добавить в корзину
-                                        </AnimatedButton>
+                                        </AnimatedButton>}
                                         <AnimatedIcon
                                             icon={faShareAlt}
                                             color={'#b1b1b1'}
@@ -157,6 +163,7 @@ export default class Product extends React.Component{
                     <Shares open={this.state.shareOpen} toggle={this.toggleShares}/>
                     </React.Fragment>
                 </ThemeProvider>
+                <InfoFooter/>
             </PageWrapper>
         )
     }

@@ -19,6 +19,14 @@ export class FiltersStore {
     @observable
     properties = {};
 
+    @observable
+    page = 0;
+
+    @action
+    setPage(page){
+        this.page = page;
+    }
+
     @action
     addProperties(){
         let properties = [];
@@ -42,6 +50,7 @@ export class FiltersStore {
             compactProperties[key] = uniqBy(value, e => e._id );
         });
         this.properties = compactProperties;
+        this.page = 0;
     }
 
     @computed
@@ -68,24 +77,28 @@ export class FiltersStore {
             remove(this.filters.properties._id, a => a === id);
             if (this.filters.properties._id.length === 0) delete this.filters.properties;
         }
+        this.page = 0;
     }
 
 
     @action
     cleanProperties(){
         delete this.filters.properties;
+        this.page = 0;
     }
 
     @action
     setMaxPrice(price){
         if (price === '') this.filters.price_lte = null;
         else this.filters.price_lte = price - 0;
+        this.page = 0;
     }
 
     @action
     setMinPrice(price){
         if (price === '') this.filters.price_gte = null;
         else this.filters.price_gte = price - 0;
+        this.page = 0;
     }
 
     @action

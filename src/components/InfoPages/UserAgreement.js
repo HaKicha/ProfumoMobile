@@ -6,6 +6,7 @@ import ReactMarkdown from "react-markdown";
 import PageWrapper from "../public/PageWrapper";
 import ReactGA from 'react-ga';
 import MetaTags from "react-meta-tags";
+import InfoFooter from "../public/InfoFooter";
 
 export default class UserAgreement extends React.Component {
 
@@ -25,16 +26,25 @@ export default class UserAgreement extends React.Component {
                    query {
                     useragreements{   
                         text
+                        meta_title
+                        meta_keywords
+                        meta_decription
                       }
                     } 
                 `}>
                         {({loading, error, data})=> {
                             if (loading) return <p/>
                             if (error) return <p>Error :)</p>
-                            return <ReactMarkdown source={data.useragreements[0].text}/>
+                            return <>
+                                <meta name='title' content={data.useragreements[0].meta_title}/>
+                                <meta name='keywords' content={data.useragreements[0].meta_keywords}/>
+                                <meta name='decription' content={data.useragreements[0].meta_decription}/>
+                                <ReactMarkdown source={data.useragreements[0].text}/>
+                            </>
                         }}
                     </Query>
                 </Content>
+                <InfoFooter/>
             </PageWrapper>
         )
     }

@@ -31,7 +31,7 @@ export default class Slider extends React.Component {
 
     render() {
         return (
-            <div  style={{marginTop: '10px', minHeight:'50vw'}}>
+            <div  style={{marginTop: '10px'}}>
 
             <Query query={gql`{
                       slidercontents{
@@ -52,7 +52,7 @@ export default class Slider extends React.Component {
                          url = new URL(content.link);
                         else url = new URL('https://profumo.com.ua/')
                         return ({
-                            original: `${UrlStore.MAIN_URL}${content.image.url}`,
+                            original: `${UrlStore.MAIN_URL}${ content.image[0].url }`,
                             link: `${url.pathname}`
                         });
                     });
@@ -70,7 +70,7 @@ export default class Slider extends React.Component {
                                               return (
                                                   <div className={'image-gallery-image'}>
                                                       <Link to={item.link}>
-                                                          <img src={item.original} alt=""/>
+                                                          <img src={item.original} alt=""  loading={'lazy'}/>
                                                       </Link>
                                                   </div>
                                               )
